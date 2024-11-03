@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Index');
+
+Route::prefix('/')->name('landing')->group(function () {
+    Route::get('', [LandingController::class, 'index']);
 });
