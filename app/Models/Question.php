@@ -18,6 +18,11 @@ class Question extends Model
         'custom_answers'
     ];
 
+    protected $casts = [
+        'custom_answers' => 'array',
+        'is_active' => 'boolean'
+    ];
+
     public function responses(): HasMany
     {
         return $this->hasMany(Response::class);
