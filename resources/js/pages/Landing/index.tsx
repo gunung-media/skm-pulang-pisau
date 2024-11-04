@@ -35,11 +35,11 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
     const [responses, setResponses] = useState<ResponseDto[]>([]);
 
     const fasIcons = {
-        'text-red-500': faFaceFrown,
-        'text-yellow-500': faFaceMeh,
-        'text-green-500': faFaceSmile,
-        'text-blue-500': faFaceGrin,
-        'text-purple-500': faFaceGrinStars
+        'text-red-500 hover:text-red-800': faFaceFrown,
+        'text-yellow-500 hover:text-yellow-800': faFaceMeh,
+        'text-green-500 hover:text-green-800': faFaceSmile,
+        'text-blue-500 hover:text-blue-800': faFaceGrin,
+        'text-purple-500 hover:text-purple-800': faFaceGrinStars
     }
 
     useEffect(() => {
@@ -70,8 +70,6 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
             ...responses.filter((response) => response.question_id !== sortedQuestions[currentQuestion].id),
             { question_id: sortedQuestions[currentQuestion].id, answer: answer.toString() }
         ]);
-
-        handleNextQuestion();
     };
 
     const renderPersonal = () => {
@@ -160,14 +158,17 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
                         {sortedQuestions[currentQuestion].question}
                     </h2>
                     <div className="flex justify-between mb-8">
-                        {Object.entries(fasIcons).map(([color, icon], index) => (
-                            <Icon
-                                key={index}
-                                icon={icon}
-                                color={color}
-                                onClick={() => handleSelectAnswer(index)}
-                            />
-                        ))}
+                        {Object.entries(fasIcons).map(([color, icon], index) => {
+                            return (
+                                <Icon
+                                    key={index}
+                                    icon={icon}
+                                    color={color}
+                                    isActive={responses.find((response) => response.question_id === sortedQuestions[currentQuestion].id && response.answer === index.toString()) ? true : false}
+                                    onClick={() => handleSelectAnswer(index)}
+                                />
+                            )
+                        })}
                     </div>
                 </div>
 
