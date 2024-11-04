@@ -1,7 +1,7 @@
 import { QuestionType } from '@/features/Question';
 import { RespondentDto } from '@/features/Respondent';
 import { PageProps } from '@/types';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { faFaceFrown, faFaceGrin, faFaceGrinStars, faFaceMeh, faFaceSmile } from '@fortawesome/free-solid-svg-icons';
 import Tabs from '@/components/Tabs';
 import ProgressBar from '@/components/ProgressBar';
@@ -12,6 +12,7 @@ import { RadioGroup } from '@/components/RadioGroup';
 import { Combobox } from '@/components/Combobox';
 import { Form } from '@/components/Form';
 import "./styles.css"
+import { ResponseDto } from '@/features/Response';
 
 enum TabEnum {
     personal = 'Data Diri',
@@ -31,6 +32,7 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
     });
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [sortedQuestions, setSortedQuestions] = useState<QuestionType[]>([]);
+    const [responses, setResponses] = useState<ResponseDto[]>([]);
 
     const fasIcons = {
         'text-red-500': faFaceFrown,
@@ -40,7 +42,14 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
         'text-purple-500': faFaceGrinStars
     }
 
-    const handleNext = () => {
+    useEffect(() => {
+        const activeSortedQuestions = questions
+            .filter((question) => question.is_active)
+            .sort((a, b) => a.position - b.position);
+        setSortedQuestions(activeSortedQuestions);
+    }, [questions]);
+
+    const handleNextStep = () => {
         setCurrentStep((prev) => Math.min(prev + 1, 3));
     };
 
@@ -52,15 +61,17 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
         setCurrentQuestion((prev) => (prev > 0 ? prev - 1 : prev));
     };
 
-    useEffect(() => {
-        const activeSortedQuestions = questions
-            .filter((question) => question.is_active)
-            .sort((a, b) => a.position - b.position);
-        setSortedQuestions(activeSortedQuestions);
-    }, [questions]);
-
     const handleRespondentDataChange = (e: ChangeEvent<HTMLInputElement>) => {
         setRespondentData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleSelectAnswer = (answer: number) => {
+        setResponses([
+            ...responses.filter((response) => response.question_id !== sortedQuestions[currentQuestion].id),
+            { question_id: sortedQuestions[currentQuestion].id, answer: answer.toString() }
+        ]);
+
+        handleNextQuestion();
     };
 
     const renderPersonal = () => {
@@ -134,7 +145,7 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
 
     const renderSurvey = () => {
         return (
-            <div>
+            <div className='flex flex-col justify-between'>
                 <div className='w-full'>
                     <ProgressBar
                         maxValue={sortedQuestions.length - 1}
@@ -144,8 +155,8 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
                     <p className="text-black font-semibold p-1 text-right">Question {currentQuestion + 1} of {sortedQuestions.length}</p>
                 </div>
 
-                <div className='my-20'>
-                    <h2 className="text-3xl font-bold mb-6 text-black uppercase tracking-wide">
+                <div className=''>
+                    <h2 className="text-3xl font-bold mb-6 text-black uppercase tracking-wide text-center">
                         {sortedQuestions[currentQuestion].question}
                     </h2>
                     <div className="flex justify-between mb-8">
@@ -154,19 +165,19 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
                                 key={index}
                                 icon={icon}
                                 color={color}
-                                onClick={handleNextQuestion}
+                                onClick={() => handleSelectAnswer(index)}
                             />
                         ))}
                     </div>
                 </div>
 
                 <div className='w-full flex justify-between'>
-                    <Button onClick={handlePreviousQuestion} >
-                        Soal Sebelumnya
-                    </Button>
-                    <Button onClick={handleNextQuestion}>
-                        Soal Berikutnya
-                    </Button>
+                    <Button onClick={handlePreviousQuestion}> Soal Sebelumnya </Button>
+                    {sortedQuestions.length - 1 === currentQuestion ? (
+                        <Button onClick={() => console.log('save')} className="bg-green-500">Simpan</Button>
+                    ) : (
+                        <Button onClick={handleNextQuestion}> Soal Berikutnya </Button>
+                    )}
                 </div>
             </div>
         )
@@ -183,7 +194,7 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
                         We value your feedback. Please help us improve!
                     </p>
                     <button
-                        onClick={handleNext}
+                        onClick={handleNextStep}
                         className="bg-blue-600 text-white px-6 py-3 rounded-none border-2 border-black hover:bg-blue-800 active:translate-y-1 transition"
                     >
                         Start Survey
@@ -198,7 +209,7 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
                         setActiveTab={setActiveTab}
                         tabsArray={tabsArray}
                     />
-                    <div className="max-w-full rounded-b-base border-2 border-border bg-white p-5 font-base flex justify-center">
+                    <div className="max-w-full min-h-[38rem] overflow-y-auto rounded-b-base border-2 border-border bg-white p-5 font-base flex justify-center ">
                         {activeTab === TabEnum.personal.toString() && renderPersonal()}
                         {activeTab === TabEnum.survey.toString() && renderSurvey()}
                     </div>
