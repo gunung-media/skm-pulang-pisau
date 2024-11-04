@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 
-// Frameworks data
-const frameworks = [
-    { value: 'next.js', label: 'Next.js' },
-    { value: 'sveltekit', label: 'SvelteKit' },
-    { value: 'nuxt.js', label: 'Nuxt.js' },
-    { value: 'remix', label: 'Remix' },
-    { value: 'astro', label: 'Astro' },
-];
+type props = {
+    name: string
+    items: string[]
+    onChange: (value: string) => void
+}
 
-export function ComboboxDemo() {
+export const Combobox: FC<props> = ({ items, name, onChange }) => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredFrameworks = frameworks.filter((framework) =>
-        framework.label.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredItems = items.filter((item) =>
+        item.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -28,43 +25,44 @@ export function ComboboxDemo() {
                 }}
                 role="combobox"
                 aria-expanded={open}
-                className="w-full justify-between bg-main p-2 border-border border-2 rounded flex items-center"
+                className="w-full justify-between bg-main p-2 border-border border-2 rounded flex items-center z-0"
             >
                 {value
-                    ? frameworks.find((framework) => framework.value === value)?.label
-                    : 'Select framework...'}
+                    ? items.find((item) => item === value)
+                    : `Pilih ${name}`
+                }
                 <ChevronsUpDown color="black" className="ml-2 h-4 w-4 shrink-0" />
             </button>
             {open && (
                 <div className="absolute mt-1 w-full border-border border-2 bg-main rounded shadow-lg">
                     <input
                         type="text"
-                        placeholder="Search framework..."
+                        placeholder={`Cari ${name}`}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full p-2 border-border border-b-2 focus:outline-none bg-main placeholder:text-text"
                     />
                     <div className="max-h-40 overflow-y-auto p-2">
-                        {filteredFrameworks.length > 0 ? (
-                            filteredFrameworks.map((framework) => (
+                        {filteredItems.length > 0 ? (
+                            filteredItems.map((item, key) => (
                                 <div
-                                    key={framework.value}
+                                    key={key}
                                     onClick={() => {
-                                        setValue(framework.value === value ? '' : framework.value);
+                                        setValue(item === value ? '' : item);
+                                        onChange(item === value ? '' : item);
                                         setOpen(false);
                                         setSearchTerm('');
                                     }}
                                     className={`flex items-center p-2 cursor-pointer hover:border-border hover:border-2 rounded-base`}
                                 >
                                     <Check
-                                        className={`mr-2 h-4 w-4 ${value === framework.value ? 'opacity-100' : 'opacity-0'
-                                            }`}
+                                        className={`mr-2 h-4 w-4 ${value === item ? 'opacity-100' : 'opacity-0'}`}
                                     />
-                                    {framework.label}
+                                    {item}
                                 </div>
                             ))
                         ) : (
-                            <div className="p-2 text-gray-500">No framework found.</div>
+                            <div className="p-2 text-gray-500">{`Tidak ditemukan ${name}`}</div>
                         )}
                     </div>
                 </div>
