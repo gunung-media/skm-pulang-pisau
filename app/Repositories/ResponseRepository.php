@@ -6,7 +6,7 @@ use App\Models\Response;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
-class ReponseRepository implements RepositoryInterface
+class ResponseRepository implements RepositoryInterface
 {
     public function __construct(
         public Response $response
