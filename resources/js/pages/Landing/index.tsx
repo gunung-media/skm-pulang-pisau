@@ -11,8 +11,9 @@ import Input from '@/components/Input';
 import { RadioGroup } from '@/components/RadioGroup';
 import { Combobox } from '@/components/Combobox';
 import { Form } from '@/components/Form';
-import './styles.css';
 import { ResponseDto } from '@/features/Response';
+import './styles.css';
+import { Head } from '@inertiajs/react';
 
 enum TabEnum {
     PERSONAL = 'Data Diri',
@@ -148,6 +149,8 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-grid font-sans">
+            <Head title='Survey Kepuasan' />
+
             {currentStep === 0 ? (
                 <div className="bg-blue-100 border-4 border-black p-10 text-center max-w-lg mx-auto">
                     <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">Welcome to Our Survey!</h1>
