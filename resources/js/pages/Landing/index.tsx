@@ -35,11 +35,11 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
     const [responses, setResponses] = useState<ResponseDto[]>([]);
 
     const fasIcons = {
-        'text-red-500 hover:text-red-800': faFaceFrown,
-        'text-yellow-500 hover:text-yellow-800': faFaceMeh,
-        'text-green-500 hover:text-green-800': faFaceSmile,
-        'text-blue-500 hover:text-blue-800': faFaceGrin,
-        'text-purple-500 hover:text-purple-800': faFaceGrinStars
+        'text-red-500 hover:text-red-700': faFaceFrown,
+        'text-yellow-500 hover:text-yellow-700': faFaceMeh,
+        'text-green-500 hover:text-green-700': faFaceSmile,
+        'text-blue-500 hover:text-blue-700': faFaceGrin,
+        'text-purple-500 hover:text-purple-700': faFaceGrinStars
     }
 
     useEffect(() => {
@@ -150,7 +150,7 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
                         currentValue={currentQuestion}
                         rounded='full'
                     />
-                    <p className="text-black font-semibold p-1 text-right">Question {currentQuestion + 1} of {sortedQuestions.length}</p>
+                    <p className="text-black font-semibold p-1 text-right">Pertanyaan {currentQuestion + 1} dari {sortedQuestions.length}</p>
                 </div>
 
                 <div className=''>

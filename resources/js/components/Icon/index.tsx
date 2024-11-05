@@ -17,13 +17,11 @@ export const Icon: FC<{
             size="4x"
             className={cn(
                 color,
-                'cursor-pointer hover:scale-125 transition duration-150 transform ',
-                isActive && `scale-125 ${color.split('hover:')[1]}`
+                'cursor-pointer hover:scale-150 transition duration-150 transform ',
+                'drop-shadow-[3px_3px_0px_#000] hover:drop-shadow-none',
+                isActive && `scale-150 ${color.split('hover:')[1]} drop-shadow-none`,
             )
             }
-            style={{
-                filter: 'drop-shadow(2px 2px 0px #000)'
-            }}
         />
     )
 
