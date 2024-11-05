@@ -33,7 +33,7 @@ const ToastContainer: FC<ToastProps> = ({ messages, removeToast }) => (
             >
                 <div>
                     {message.title && <div className={toastStyles.title}>{message.title}</div>}
-                    {message.description && <div className={toastStyles.description}>{message.description}</div>}
+                    {message.description && <div className={toastStyles.description} dangerouslySetInnerHTML={{ __html: message.description }}></div>}
                 </div>
                 <button onClick={() => removeToast(message.id)} className={toastStyles.closeButton}>
                     <X className="h-4 w-4" />
@@ -52,7 +52,7 @@ export const useToast = () => {
 
         setTimeout(() => {
             removeToast(id);
-        }, 2000);
+        }, 3000);
     }, []);
 
     const removeToast = (id: string) => {
