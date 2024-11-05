@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Question;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\TModel;
 
 class QuestionRepository implements RepositoryInterface
 {
@@ -15,6 +16,13 @@ class QuestionRepository implements RepositoryInterface
     public function getAll(): Collection
     {
         return $this->question->all();
+    }
+
+    public function getActive(): Collection
+    {
+        return $this->question
+            ->where('is_active', true)
+            ->get();
     }
 
     public function findById($id): ?Question
