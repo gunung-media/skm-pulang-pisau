@@ -28,7 +28,7 @@ const ProgressBar = ({
     return (
         <div
             className={cn(
-                "w-72 md:w-full border-black border-2 focus:outline-none h-9 overflow-hidden shadow-[2px_2px_0px_rgba(0,0,0,1)] bg-white",
+                "w-full md:w-full border-black border-2 focus:outline-none h-9 overflow-hidden shadow-[2px_2px_0px_rgba(0,0,0,1)] bg-white",
                 { "rounded-none": rounded === "none" },
                 { "rounded-md": rounded === "md" },
                 { "rounded-full": rounded === "full" },
