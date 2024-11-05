@@ -1,26 +1,23 @@
 import { cn } from '@/utils/neobrutalism'
 import { ClassValue } from 'clsx'
 
-type Props = {
+type Props<T extends string | number> = {
     className?: ClassValue
-    tabsArray: string[]
-    activeTab: string
-    setActiveTab: React.Dispatch<React.SetStateAction<string>>
+    tabsArray: T[]
+    activeTab: T
+    setActiveTab: React.Dispatch<React.SetStateAction<T>>
 }
 
-export default function Tabs({
+export default function Tabs<T extends string | number>({
     className,
     tabsArray,
     activeTab,
     setActiveTab,
-}: Props) {
+}: Props<T>) {
     return (
         <div
             style={{
-                gridTemplateColumns: Array(tabsArray.length)
-                    .fill('x')
-                    .map(() => '1fr')
-                    .join(' '),
+                gridTemplateColumns: tabsArray.map(() => '1fr').join(' '),
             }}
             className={cn('grid w-full rounded-base text-sm sm:text-base', className)}
         >
