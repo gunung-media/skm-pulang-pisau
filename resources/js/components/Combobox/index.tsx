@@ -17,7 +17,7 @@ export const Combobox: FC<props> = ({ items, name, onChange }) => {
     );
 
     return (
-        <div className="relative ">
+        <div className="relative z-20">
             <button
                 onClick={(e) => {
                     e.preventDefault()
@@ -34,7 +34,7 @@ export const Combobox: FC<props> = ({ items, name, onChange }) => {
                 <ChevronsUpDown color="black" className="ml-2 h-4 w-4 shrink-0" />
             </button>
             {open && (
-                <div className="absolute mt-1 w-full border-border border-2 bg-main rounded shadow-lg">
+                <div className="absolute mt-1 w-full border-border border-2 bg-main rounded shadow-lg z-50">
                     <input
                         type="text"
                         placeholder={`Cari ${name}`}

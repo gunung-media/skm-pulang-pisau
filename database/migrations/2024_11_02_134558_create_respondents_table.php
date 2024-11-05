@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('respondents', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('gender', ['male', 'female']);
+            $table->enum('gender', ['Pria', 'Wanita']);
             $table->string('education');
             $table->string('jobs');
             $table->integer('age');
