@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female']);
             $table->string('education');
             $table->string('jobs');
+            $table->integer('age');
             $table->string('type_of_service')->nullable();
             $table->timestamps();
         });

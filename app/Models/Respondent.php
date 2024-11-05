@@ -14,6 +14,7 @@ class Respondent extends Model
         'name',
         'gender',
         'education',
+        'age',
         'jobs',
         'type_of_service',
     ];
