@@ -6,7 +6,7 @@ import { faFaceFrown, faFaceGrin, faFaceGrinStars, faFaceMeh, faFaceSmile } from
 import Tabs from '@/components/Tabs';
 import ProgressBar from '@/components/ProgressBar';
 import Button from '@/components/Button';
-import { Icon } from '@/components/Icon';
+import { Icon } from '@/components/FontAwesomeIcon';
 import Input from '@/components/Input';
 import { RadioGroup } from '@/components/RadioGroup';
 import { Combobox } from '@/components/Combobox';
@@ -197,10 +197,10 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
 
             {currentStep === 0 ? (
                 <div className="bg-blue-100 border-4 border-black p-10 text-center max-w-lg mx-auto">
-                    <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">Welcome to Our Survey!</h1>
-                    <p className="text-lg mb-8 text-black font-semibold">We value your feedback. Please help us improve!</p>
+                    <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">FeedbackHub</h1>
+                    <p className="text-lg mb-8 text-black font-semibold">Listen, Understand, Improve</p>
                     <center>
-                        <Button onClick={handleNextStep}>Start Survey</Button>
+                        <Button onClick={handleNextStep}>Mulai Survey</Button>
                     </center>
                 </div>
             ) : (
