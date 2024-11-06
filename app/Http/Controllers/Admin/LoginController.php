@@ -24,11 +24,11 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             $request->session()->regenerate();
             return redirect()->intended(route('admin.dashboard'));
         }
 
-        return response('Akun tidak ditemukan', 401);
+        return back()->withErrors(['error' => 'Akun tidak ditemukan']);
     }
 }

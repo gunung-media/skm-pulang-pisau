@@ -84,7 +84,7 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
                     formatError
                 )
             },
-            onSuccess: (newProps) => {
+            onSuccess: () => {
                 toast('Sukses Menyimpan', 'Terima kasih sudah mau meluangkan waktunya!')
                 handleReset()
             }
