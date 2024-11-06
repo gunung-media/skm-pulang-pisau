@@ -13,7 +13,7 @@ type LayoutProps = {
     children: React.ReactNode;
 };
 
-const Layout = ({ background, back, title, children }: LayoutProps) => {
+const AuthenticatedLayout = ({ background, back, title, children }: LayoutProps) => {
     return (
         <>
             <Head>
@@ -50,4 +50,4 @@ const Layout = ({ background, back, title, children }: LayoutProps) => {
     );
 };
 
-export default Layout;
+export default AuthenticatedLayout;

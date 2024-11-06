@@ -1,9 +1,9 @@
-import Layout from "@/components/Layout";
+import AuthenticatedLayout from "@/Layouts/Authenticated";
 
 export default function Dashboard() {
     return (
-        <Layout title="Dashboard" >
+        <AuthenticatedLayout title="Dashboard">
             <h1>Hello World</h1>
-        </Layout>
+        </AuthenticatedLayout>
     )
 }
