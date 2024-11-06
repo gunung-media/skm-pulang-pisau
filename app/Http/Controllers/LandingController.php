@@ -51,7 +51,7 @@ class LandingController extends Controller
             return response(status: 200);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return response($th, status: 500);
+            return back()->withErrors(['error' => $th->getMessage()]);
         }
     }
 }
