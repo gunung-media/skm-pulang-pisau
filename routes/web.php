@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 
 Route::prefix('/')->name('landing')->group(function () {
@@ -10,8 +9,13 @@ Route::prefix('/')->name('landing')->group(function () {
     Route::post('', [LandingController::class, 'store'])->name('.submit');
 });
 
-Route::prefix('/admin')->name('admin.')->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('Admin/Dashboard/index');
-    })->name('dashboard');
+Route::prefix('/admin')->name('admin.')->namespace('App\Http\Controllers\Admin')->group(function () {
+    Route::group(['middleware' => 'guest'], function () {
+        Route::get('/login', 'LoginController@index')->name('login');
+        Route::post('/login', 'LoginController@login')->name('login');
+    });
+
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/', 'DashboardController')->name('dashboard');
+    });
 });

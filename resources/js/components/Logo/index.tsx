@@ -1,6 +1,7 @@
 import Image from "@/components/Image";
 import { Link } from "@inertiajs/react";
 import Logo from "@/images/logo.png"
+import LogoLight from "@/images/logo-light.png"
 
 type TestProps = {
     className?: string;
@@ -12,7 +13,7 @@ const Test = ({ className, light }: TestProps) => {
         <Link className={`flex w-[8rem] ${className}`} href={route('admin.dashboard')}>
             <Image
                 className="w-full h-auto"
-                src={Logo}
+                src={light ? LogoLight : Logo}
                 alt="FeedbackHub"
             />
         </Link>
