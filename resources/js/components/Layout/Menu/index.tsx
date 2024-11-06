@@ -1,5 +1,6 @@
 import Icon from "@/components/Icon";
 import { navigationMobile } from "@/constants/navigation";
+import { getFullUrl } from "@/utils/url";
 import { Link } from "@inertiajs/react";
 
 type MenuProps = {};
@@ -15,7 +16,7 @@ const Menu = ({ }: MenuProps) => {
                         key={index}
                     >
                         <Icon
-                            className={`icon-22 transition-colors dark:fill-white ${route().current() === link.url && "!fill-purple-1"
+                            className={`icon-22 transition-colors dark:fill-white ${getFullUrl() === link.url && "!fill-purple-1"
                                 }`}
                             name={link.icon}
                         />
@@ -26,7 +27,7 @@ const Menu = ({ }: MenuProps) => {
                         key={index}
                     >
                         <Icon
-                            className={`icon-22 transition-colors dark:fill-white ${route().current() === link.url ||
+                            className={`icon-22 transition-colors dark:fill-white ${getFullUrl() === link.url ||
                                 (route().current()?.startsWith(link.url)
                                     ? "!fill-purple-1"
                                     : "")

@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Menu from "./Menu";
 import { Head } from "@inertiajs/react";
+import bg from '@/images/bg.svg'
 
 type LayoutProps = {
     background?: boolean;
@@ -34,7 +35,7 @@ const Layout = ({ background, back, title, children }: LayoutProps) => {
                             <div className="absolute top-1/2 left-[40vw] -translate-y-[72%] w-[85vw] rotate-180 4xl:w-[85rem] xl:left-[30vw] xl:-top-[20rem] xl:w-[60rem] xl:-translate-y-0 md:-top-[13rem] md:left-[15vw] md:w-[40rem]">
                                 <Image
                                     className="w-full"
-                                    src="/images/bg.svg"
+                                    src={bg}
                                     width={1349}
                                     height={1216}
                                     alt=""

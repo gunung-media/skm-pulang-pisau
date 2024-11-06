@@ -3,40 +3,17 @@ export const navigation = [
         title: "Dashboard",
         icon: "dashboard",
         counter: 16,
-        url: "/dashboard/ecommerce",
+        url: route('admin.dashboard'),
     },
     {
-        title: "Projects",
+        title: "Pertanyaan",
         icon: "projects",
         url: "/projects/projects-list-v1",
     },
     {
-        title: "Tasks",
+        title: "Respondent",
         icon: "tasks",
         url: "/projects/tasks-list-v1",
-    },
-    {
-        title: "Kanban Desk",
-        icon: "layers",
-        counter: 28,
-        url: "/projects/kanban-desc",
-    },
-    {
-        title: "File Manager",
-        icon: "file",
-        counter: 14,
-        counterColor: "#98E9AB",
-        url: "/projects/file-manager-folders",
-    },
-    {
-        title: "Calendar",
-        icon: "calendar",
-        url: "/projects/calendar",
-    },
-    {
-        title: "Inbox",
-        icon: "email",
-        url: "/inbox/mail-list",
     },
 ];
 
@@ -52,13 +29,5 @@ export const navigationMobile = [
     {
         icon: "tasks",
         url: "/projects/tasks-list-v1",
-    },
-    {
-        icon: "layers",
-        url: "/projects/kanban-desc",
-    },
-    {
-        icon: "dots",
-        onClick: () => console.log("Click on dots"),
     },
 ];

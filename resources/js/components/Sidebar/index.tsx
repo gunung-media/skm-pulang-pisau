@@ -3,12 +3,14 @@ import Logo from "@/components/Logo";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Menu from "./Menu";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
+import { PageProps } from "@/types";
 
 type SidebarProps = {};
 
 const Sidebar = ({ }: SidebarProps) => {
     const [visible, setVisible] = useState<boolean>(false);
+    const { props: { auth: { user } } } = usePage<PageProps>()
 
     return (
         <div
@@ -43,11 +45,11 @@ const Sidebar = ({ }: SidebarProps) => {
                     >
                         <Image
                             className="object-cover scale-105"
-                            src="https://ui-avatars.com/api/?rounded=true&name=Richie%20Zakaria"
+                            src={`https://ui-avatars.com/api/?rounded=true&name=${user?.name ?? 'Admin'}`}
                             alt="Avatar"
                         />
                     </div>
-                    Henry Richardson
+                    {user?.name ?? 'Admin'}
                 </Link>
                 <button
                     className={`btn-transparent-light btn-square btn-small ml-auto ${visible ? "flex" : "xl:hidden"

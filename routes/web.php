@@ -13,5 +13,5 @@ Route::prefix('/')->name('landing')->group(function () {
 Route::prefix('/admin')->name('admin.')->group(function () {
     Route::get('/', function () {
         return Inertia::render('Admin/Dashboard/index');
-    });
+    })->name('dashboard');
 });

@@ -1,5 +1,6 @@
 import Image from "@/components/Image";
 import { Link } from "@inertiajs/react";
+import Logo from "@/images/logo.png"
 
 type TestProps = {
     className?: string;
@@ -7,22 +8,12 @@ type TestProps = {
 };
 
 const Test = ({ className, light }: TestProps) => {
-    const isDarkMode = false;
-
     return (
-        <Link className={`flex w-[7.125rem] ${className}`} href="/">
+        <Link className={`flex w-[8rem] ${className}`} href={route('admin.dashboard')}>
             <Image
                 className="w-full h-auto"
-                src={
-                    light
-                        ? "/images/logo-light.svg"
-                        : isDarkMode
-                            ? "/images/logo-light.svg"
-                            : "/images/logo-dark.svg"
-                }
-                width={113}
-                height={25}
-                alt="Bruddle"
+                src={Logo}
+                alt="FeedbackHub"
             />
         </Link>
     );

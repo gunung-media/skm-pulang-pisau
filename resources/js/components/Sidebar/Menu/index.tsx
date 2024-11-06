@@ -1,6 +1,7 @@
 import Icon from "@/components/Icon";
 
 import { navigation } from "@/constants/navigation";
+import { getFullUrl } from "@/utils/url";
 import { Link } from "@inertiajs/react";
 import { twMerge } from "tailwind-merge";
 
@@ -9,6 +10,7 @@ type MenuProps = {
 };
 
 const Menu = ({ visible }: MenuProps) => {
+
     return (
         <>
             <div
@@ -21,7 +23,7 @@ const Menu = ({ visible }: MenuProps) => {
                 {navigation.map((link: any, index: number) => (
                     <Link
                         className={twMerge(
-                            `flex items-center h-9.5 mb-2 px-4 text-sm text-white fill-white font-bold last:mb-0 transition-colors hover:bg-n-2 ${route().current() === link.url &&
+                            `flex items-center h-9.5 mb-2 px-4 text-sm text-white fill-white font-bold last:mb-0 transition-colors hover:bg-n-2 ${getFullUrl() === link.url &&
                             "bg-n-2 text-purple-1 fill-purple-1"
                             } ${visible ? "text-sm" : "xl:text-0"}`
                         )}
