@@ -1,5 +1,5 @@
 import { QuestionType } from '@/features/Question';
-import { RespondentDto } from '@/features/Respondent';
+import { RespondentDto, respondentKeys } from '@/features/Respondent';
 import { PageProps } from '@/types';
 import { ChangeEvent, FormEventHandler, useEffect, useState } from 'react';
 import { faFaceFrown, faFaceGrin, faFaceGrinStars, faFaceMeh, faFaceSmile } from '@fortawesome/free-solid-svg-icons';
@@ -78,10 +78,12 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
             response: responseData.map((response) => ({ question_id: response.question_id, answer: response.answer }))
         }, {
             onError: (error) => {
-                const formatError = error ? Object.entries(error).map(([errorField, desc]) => (`${errorField}: ${desc}`)).join('</br>') : undefined
+                if (error && Object.keys(error).some(key => respondentKeys.includes(key as any))) {
+                    setActiveTab(TabEnum.PERSONAL)
+                }
                 toast(
                     'Gagal Menyimpan',
-                    formatError
+                    'Ada beberapa input yang belum sesuai!'
                 )
             },
             onSuccess: () => {
@@ -113,7 +115,11 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
             </Form>
             <div className="flex w-full gap-3">
                 <Form label="Jenis Kelamin" className="w-1/2" error={errors.gender}>
-                    <RadioGroup items={['Pria', 'Wanita']} onChange={(value) => setRespondentData({ ...respondentData, gender: value })} />
+                    <RadioGroup
+                        items={['Pria', 'Wanita']}
+                        value={respondentData.gender}
+                        onChange={(value) => setRespondentData({ ...respondentData, gender: value })}
+                    />
                 </Form>
                 <Form label="Umur" className="w-1/2" error={errors.age}>
                     <Input
@@ -127,10 +133,19 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
             </div>
             <div className="flex w-full gap-3">
                 <Form label="Edukasi" className="w-full" error={errors.education}>
-                    <Combobox name="Edukasi" items={['SD', 'SMP', 'SMA', 'Diploma', 'S1', 'S2', 'S3']} onChange={(value) => setRespondentData({ ...respondentData, education: value })} />
+                    <Combobox
+                        name="Edukasi"
+                        items={['SD', 'SMP', 'SMA', 'Diploma', 'S1', 'S2', 'S3']}
+                        onChange={(value) => setRespondentData({ ...respondentData, education: value })}
+                        baseValue={respondentData.education}
+                    />
                 </Form>
                 <Form label="Pekerjaan" className="w-full" error={errors.jobs}>
-                    <Combobox name="Pekerjaan" items={['PNS', 'Pegawai Swasta', 'Wiraswasta', 'Pelajar/Mahasiswa', 'Lainnya']} onChange={(value) => setRespondentData({ ...respondentData, jobs: value })} />
+                    <Combobox
+                        name="Pekerjaan"
+                        items={['PNS', 'Pegawai Swasta', 'Wiraswasta', 'Pelajar/Mahasiswa', 'Lainnya']} onChange={(value) => setRespondentData({ ...respondentData, jobs: value })}
+                        baseValue={respondentData.jobs}
+                    />
                 </Form>
             </div>
             <Form label="Jenis Layanan yang diterima" error={errors.type_of_service}>

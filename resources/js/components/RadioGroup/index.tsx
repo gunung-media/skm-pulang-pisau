@@ -2,16 +2,17 @@ import { FC, useState } from 'react'
 
 type props = {
     items: string[],
+    value?: string,
     onChange?: (value: string) => void
 }
 
-export const RadioGroup: FC<props> = ({ items, onChange }) => {
+export const RadioGroup: FC<props> = ({ items, value, onChange }) => {
     const [activeItem, setActiveItem] = useState<string | null>(null)
 
     return (
         <div className="font-base">
             {items.map((item) => {
-                const isChecked = activeItem === item
+                const isChecked = activeItem === item || value === item
 
                 return (
                     <button

@@ -4,17 +4,19 @@ import { Check, ChevronsUpDown } from 'lucide-react';
 type props = {
     name: string
     items: string[]
+    baseValue?: string
     onChange: (value: string) => void
 }
 
-export const Combobox: FC<props> = ({ items, name, onChange }) => {
+export const Combobox: FC<props> = ({ items, name, baseValue, onChange }) => {
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(baseValue ?? '');
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredItems = items.filter((item) =>
         item.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
 
     return (
         <div className="relative z-20">
