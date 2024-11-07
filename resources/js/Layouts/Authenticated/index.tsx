@@ -8,7 +8,7 @@ import bg from '@/images/bg.svg'
 
 type LayoutProps = {
     background?: boolean;
-    back?: boolean;
+    back?: string;
     title?: string;
     children: React.ReactNode;
 };

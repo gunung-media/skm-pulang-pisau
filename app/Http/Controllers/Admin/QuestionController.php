@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\QuestionRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class QuestionController extends Controller
 {
@@ -13,55 +17,61 @@ class QuestionController extends Controller
         protected QuestionRepository $questionRepository
     ) {}
 
-    public function index()
+    public function index(): InertiaResponse
     {
         return Inertia::render('Admin/Question/index', [
             'questions' => $this->questionRepository->getAll()
         ]);
     }
 
-    public function create()
+    public function create(): InertiaResponse
     {
-        //
+        return Inertia::render('Admin/Question/Form/index');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request): Response|RedirectResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $this->questionRepository->create($request->all());
+            DB::commit();
+            return response(status: 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->withErrors(['error' => $th->getMessage()]);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(string $id): InertiaResponse
     {
-        //
+        return Inertia::render('Admin/Question/Form/index', [
+            'question' => $this->questionRepository->findById($id)
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, string $id): Response|RedirectResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $this->questionRepository->update($id, $request->all());
+            DB::commit();
+            return response(status: 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->withErrors(['error' => $th->getMessage()]);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(string $id): Response|RedirectResponse
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        DB::beginTransaction();
+        try {
+            $this->questionRepository->delete($id);
+            DB::commit();
+            return response(status: 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return back()->withErrors(['error' => $th->getMessage()]);
+        }
     }
 }

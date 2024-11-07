@@ -5,6 +5,8 @@ import AuthenticatedLayout from "@/layouts/Authenticated";
 import SimpleTabs from "@/components/SimpleTabs";
 import { PageProps } from "@/types";
 import { QuestionType } from "@/features/Question";
+import { router } from "@inertiajs/react";
+import { useToast } from "@/components/Toast";
 
 const types = [
     {
@@ -27,6 +29,7 @@ export default function Question({ questions }: PageProps & { questions: Questio
     const [inactiveQuestions, setInactiveQuestions] = useState<QuestionType[]>([])
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const menuRef = useRef<HTMLDivElement | null>(null);
+    const { toast, ToastContainer } = useToast();
 
     const toggleMenu = (index: number) => {
         setActiveIndex(activeIndex === index ? null : index);
@@ -117,7 +120,7 @@ export default function Question({ questions }: PageProps & { questions: Questio
                                 >
                                     <button
                                         onClick={() => {
-                                            console.log("Edit clicked");
+                                            router.get(route('admin.question.edit', item.id))
                                             setActiveIndex(null);
                                         }}
                                         className="block w-full px-4 py-2 text-left border-b-2 border-black text-black hover:bg-gray-200"
@@ -126,7 +129,14 @@ export default function Question({ questions }: PageProps & { questions: Questio
                                     </button>
                                     <button
                                         onClick={() => {
-                                            console.log("Delete clicked");
+                                            router.delete(route('admin.question.destroy', item.id), {
+                                                onSuccess: () => {
+                                                    toast("Pertanyaan dihapus")
+                                                }, onError: (error) => {
+                                                    console.error(error)
+                                                    toast("Gagal menghapus pertanyaan", error.toString())
+                                                }
+                                            })
                                             setActiveIndex(null);
                                         }}
                                         className="block w-full px-4 py-2 text-left text-black hover:bg-gray-200"
@@ -139,6 +149,7 @@ export default function Question({ questions }: PageProps & { questions: Questio
                     ))}
                 </tbody>
             </table>
+            {ToastContainer}
         </AuthenticatedLayout >
     );
 };

@@ -17,6 +17,6 @@ Route::prefix('/admin')->name('admin.')->namespace('App\Http\Controllers\Admin')
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/', 'DashboardController')->name('dashboard');
-        Route::resource('question', 'QuestionController');
+        Route::resource('question', 'QuestionController')->except('show');
     });
 });
