@@ -3,9 +3,10 @@ import { useScrollPosition } from "@n8tb1t/use-scroll-position";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import Create from "./Create";
+import { router } from "@inertiajs/react";
 
 type HeaderProps = {
-    back?: boolean;
+    back?: string;
     title?: string;
 };
 
@@ -27,7 +28,7 @@ const Header = ({ back, title }: HeaderProps) => {
                 {back && (
                     <button
                         className="btn-stroke btn-square btn-medium shrink-0 mr-6 2xl:mr-4 md:!w-6 md:h-6 md:mr-3"
-                        onClick={() => route()}
+                        onClick={() => router.visit(back)}
                     >
                         <Icon name="arrow-prev" />
                     </button>

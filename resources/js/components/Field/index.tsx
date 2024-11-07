@@ -16,6 +16,7 @@ type FieldProps = {
     icon?: string;
     image?: string;
     currency?: string;
+    disabled?: boolean;
 };
 
 const Field = ({
@@ -31,6 +32,7 @@ const Field = ({
     icon,
     image,
     currency,
+    disabled,
 }: FieldProps) => {
     const [visiblePassword, setVisiblePassword] = useState<boolean>(false);
 
@@ -54,6 +56,7 @@ const Field = ({
                             onChange={onChange}
                             placeholder={placeholder}
                             required={required}
+                            disabled={disabled}
                         ></textarea>
                     ) : (
                         <input
@@ -61,7 +64,8 @@ const Field = ({
                                 `w-full h-16 px-5 bg-white border border-n-1 rounded-sm text-sm text-n-1 font-bold outline-none transition-colors placeholder:text-n-3 focus:border-purple-1 dark:bg-n-1 dark:border-white dark:text-white dark:focus:border-purple-1 dark:placeholder:text-white/75 ${icon || type === "password" ? "pr-15" : ""
                                 } ${success ? "pr-15 !border-green-1" : ""} ${error ? "pr-15 !border-pink-1" : ""
                                 } ${image || currency ? "pr-15" : ""
-                                } ${classInput}`
+                                } ${classInput}`,
+                                "disabled:bg-n-4 disabled:cursor-not-allowed"
                             )}
                             type={
                                 (type === "password" &&
@@ -73,6 +77,7 @@ const Field = ({
                             onChange={onChange}
                             placeholder={placeholder}
                             required={required}
+                            disabled={disabled}
                         />
                     )}
                     {icon && type !== "password" && !success && !error && (

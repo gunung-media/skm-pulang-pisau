@@ -1,5 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import Icon from "@/components/Icon";
+import { router } from "@inertiajs/react";
 
 type CreateProps = {};
 
@@ -7,27 +8,9 @@ const Create = ({ }: CreateProps) => {
     const buttons = [
         {
             id: "0",
-            title: "New Project",
+            title: "Pertanyaan",
             icon: "projects",
-            onClick: () => console.log("New Project"),
-        },
-        {
-            id: "1",
-            title: "New Task",
-            icon: "task",
-            onClick: () => console.log("New Task"),
-        },
-        {
-            id: "2",
-            title: "New Contact",
-            icon: "add-member",
-            onClick: () => console.log("New Contact"),
-        },
-        {
-            id: "3",
-            title: "New Event",
-            icon: "event",
-            onClick: () => console.log("New Event"),
+            onClick: () => router.visit(route('admin.question.create')),
         },
     ];
 
