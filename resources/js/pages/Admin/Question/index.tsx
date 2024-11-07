@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "@/components/Icon";
 import Sorting from "@/components/Sorting";
 import AuthenticatedLayout from "@/layouts/Authenticated";
@@ -25,10 +25,27 @@ export default function Question({ questions }: PageProps & { questions: Questio
     const [type, setType] = useState<string>("all-questions");
     const [activeQuestions, setActiveQuestions] = useState<QuestionType[]>([])
     const [inactiveQuestions, setInactiveQuestions] = useState<QuestionType[]>([])
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const menuRef = useRef<HTMLDivElement | null>(null);
+
+    const toggleMenu = (index: number) => {
+        setActiveIndex(activeIndex === index ? null : index);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            setActiveIndex(null);
+        }
+    };
 
     useEffect(() => {
         setActiveQuestions(questions.filter((item) => item.is_active))
         setInactiveQuestions(questions.filter((item) => !item.is_active))
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
     }, []);
 
     const questionsByType = () => {
@@ -86,10 +103,38 @@ export default function Question({ questions }: PageProps & { questions: Questio
                             </td>
                             <td className="td-custom text-center">{item.number_of_answers ?? 5}</td>
                             <td className="td-custom text-right">
-                                <button className="btn-transparent-dark btn-small btn-square">
+                                <button
+                                    onClick={() => toggleMenu(index)}
+                                    className="btn-transparent-dark btn-small btn-square">
                                     <Icon name="dots" />
                                 </button>
                             </td>
+
+                            {activeIndex === index && (
+                                <div
+                                    ref={menuRef}
+                                    className="absolute right-0 mt-2 w-32 bg-white border-2 border-black rounded-lg shadow-dark z-10 p-1"
+                                >
+                                    <button
+                                        onClick={() => {
+                                            console.log("Edit clicked");
+                                            setActiveIndex(null);
+                                        }}
+                                        className="block w-full px-4 py-2 text-left border-b-2 border-black text-black hover:bg-gray-200"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            console.log("Delete clicked");
+                                            setActiveIndex(null);
+                                        }}
+                                        className="block w-full px-4 py-2 text-left text-black hover:bg-gray-200"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            )}
                         </tr>
                     ))}
                 </tbody>
