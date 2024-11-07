@@ -208,12 +208,12 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-grid font-sans">
 
-            <Head title='Survey Kepuasan' />
+            <Head title='FeedbackHub' />
 
             {currentStep === 0 ? (
                 <div className="bg-blue-100 border-4 border-black p-10 text-center max-w-lg mx-auto">
                     <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">FeedbackHub</h1>
-                    <p className="text-lg mb-8 text-black font-semibold">Listen, Understand, Improve</p>
+                    <p className="text-md mb-8 text-black font-base">Kami mendengarkan setiap masukan dengan seksama, memahami kebutuhan Anda, dan berkomitmen untuk terus meningkatkan kualitas layanan kami demi kepuasan Anda.</p>
                     <center>
                         <Button onClick={handleNextStep}>Mulai Survey</Button>
                     </center>
