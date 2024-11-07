@@ -18,7 +18,7 @@ const Sidebar = ({ }: SidebarProps) => {
                 }`}
         >
             <div className="flex justify-between items-center h-[1.625rem] mb-11">
-                <Logo className={visible ? "flex" : "xl:hidden"} light />
+                <Logo className={visible ? "flex" : "xl:hidden"} />
                 <button
                     className="hidden xl:flex"
                     onClick={() => setVisible(!visible)}

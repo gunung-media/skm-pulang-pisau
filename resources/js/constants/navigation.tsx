@@ -2,13 +2,12 @@ export const navigation = [
     {
         title: "Dashboard",
         icon: "dashboard",
-        counter: 16,
         url: route('admin.dashboard'),
     },
     {
         title: "Pertanyaan",
         icon: "projects",
-        url: "/projects/projects-list-v1",
+        url: route('admin.question.index'),
     },
     {
         title: "Respondent",
