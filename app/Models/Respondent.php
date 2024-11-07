@@ -30,7 +30,11 @@ class Respondent extends Model
     protected function indexSatisfaction(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->responses()->selectRaw('avg(answer::int) as average')->value('average'),
+            get: fn() => $this->responses()->selectRaw(
+                app('db')->getDriverName() === 'pgsql'
+                    ? 'avg(answer::int) as average'
+                    : 'avg(cast(answer as unsigned)) as average'
+            )->value('average'),
         );
     }
 }
