@@ -17,6 +17,10 @@ class Response extends Model
         'answer',
     ];
 
+    protected $casts = [
+        'answer' => 'integer',
+    ];
+
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);

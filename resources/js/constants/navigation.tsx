@@ -12,21 +12,21 @@ export const navigation = [
     {
         title: "Respondent",
         icon: "tasks",
-        url: "/projects/tasks-list-v1",
+        url: route('admin.respondent.index'),
     },
 ];
 
 export const navigationMobile = [
     {
         icon: "dashboard",
-        url: "/dashboard/ecommerce",
+        url: route('admin.dashboard'),
     },
     {
         icon: "projects",
-        url: "/projects/projects-list-v1",
+        url: route('admin.question.index'),
     },
     {
         icon: "tasks",
-        url: "/projects/tasks-list-v1",
+        url: route('admin.respondent.index'),
     },
 ];
