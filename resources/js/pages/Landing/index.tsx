@@ -189,7 +189,7 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
                             icon={icon}
                             color={color}
                             isActive={!!responseData.find((response) => response.question_id === sortedQuestions[currentQuestion].id && response.answer === index.toString())}
-                            onClick={() => handleSelectAnswer(index)}
+                            onClick={() => handleSelectAnswer(index + 1)}
                         />
                     ))}
                 </div>
