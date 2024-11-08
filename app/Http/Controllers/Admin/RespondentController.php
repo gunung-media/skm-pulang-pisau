@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\RespondentRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class RespondentController extends Controller
 {
@@ -12,15 +14,17 @@ class RespondentController extends Controller
         protected RespondentRepository $respondentRepository
     ) {}
 
-    public function index()
+    public function index(): Response
     {
-        $respondents = $this->respondentRepository->getAll();
-        return Inertia::render('Admin/Respondent/index', [
-            'respondents' => $respondents
-        ]);
+        return Inertia::render('Admin/Respondent/index');
     }
 
-    public function show(string $id)
+    public function getRespondents(): LengthAwarePaginator
+    {
+        return $this->respondentRepository->paginate(10);
+    }
+
+    public function show(string $id): void
     {
         //
     }

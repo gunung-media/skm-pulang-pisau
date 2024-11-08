@@ -19,5 +19,6 @@ Route::prefix('/admin')->name('admin.')->namespace('App\Http\Controllers\Admin')
         Route::get('/', 'DashboardController')->name('dashboard');
         Route::resource('question', 'QuestionController')->except('show');
         Route::resource('respondent', 'RespondentController')->only(['index', 'show']);
+        Route::get('api/respondent', 'RespondentController@getRespondents')->name('respondent.get');
     });
 });

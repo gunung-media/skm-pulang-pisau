@@ -3,8 +3,10 @@ import Sorting from "@/components/Sorting";
 import SimpleTabs from "@/components/SimpleTabs";
 import AuthenticatedLayout from "@/layouts/Authenticated";
 import { PageProps } from "@/types";
-import { RespondentType } from "@/features/Respondent";
+import { getRespondents, RespondentType } from "@/features/Respondent";
 import { toIndonesian } from "@/utils/date";
+import TablePagination from "@/components/TablePagination";
+import { PaginateTableInterface } from "@/interfaces/PaginateTableInterface";
 
 const typeTasks = [
     {
@@ -31,13 +33,23 @@ const durations = [
         value: "all",
     },
 ];
-export default function Index({ respondents }: PageProps & { respondents: RespondentType[] }) {
+export default function Index() {
     const [type, setType] = useState<string>("all-respondent");
     const [duration, setDuration] = useState<string>("1h");
+    const [paginate, setPaginate] = useState<PaginateTableInterface<RespondentType>>()
+
+    const fetchRespondents = async () => {
+        try {
+            const data = await getRespondents();
+            setPaginate(data.data)
+        } catch (error) {
+            console.error('Error fetching respondents:', error);
+        }
+    };
 
     useEffect(() => {
-        console.log(respondents)
-    }, [respondents]);
+        fetchRespondents();
+    }, []);
 
     return (
         <AuthenticatedLayout title="Respondent">
@@ -82,7 +94,7 @@ export default function Index({ respondents }: PageProps & { respondents: Respon
                     </tr>
                 </thead>
                 <tbody>
-                    {respondents.map((item) => (
+                    {paginate?.data.map((item) => (
                         <tr key={item.id} className="hover:bg-gray-100">
                             <td className="td-custom">{item.name}</td>
                             <td className="td-custom">{toIndonesian(item.created_at!)}</td>
@@ -95,6 +107,15 @@ export default function Index({ respondents }: PageProps & { respondents: Respon
                     ))}
                 </tbody>
             </table>
+            <TablePagination
+                currentPage={paginate?.current_page}
+                totalPages={paginate?.last_page}
+                previousPage={paginate?.prev_page_url}
+                nextPage={paginate?.next_page_url}
+                onChangePage={(data) => {
+                    setPaginate(data.data)
+                }}
+            />
         </AuthenticatedLayout>
     );
 };
