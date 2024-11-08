@@ -1,7 +1,7 @@
 import { BaseTableInterface } from "@/interfaces/BaseTableInterface";
 import { RespondentType } from "./RespondentType";
 
-export type RespondentDto = Omit<RespondentType, keyof BaseTableInterface | 'index_satisfaction'>
+export type RespondentDto = Omit<RespondentType, keyof BaseTableInterface | 'index_satisfaction' | 'responses'>
 
 const respondentDtoKeys = <T>(obj: T) => Object.keys(obj as any) as (keyof T)[];
 

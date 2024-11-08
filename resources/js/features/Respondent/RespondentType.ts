@@ -1,4 +1,5 @@
 import { BaseTableInterface } from "@/interfaces/BaseTableInterface"
+import { ResponseType } from "@/features/Response"
 
 export interface RespondentType extends BaseTableInterface {
     name: string,
@@ -8,4 +9,5 @@ export interface RespondentType extends BaseTableInterface {
     jobs: string,
     type_of_service?: string,
     index_satisfaction?: string
+    responses?: ResponseType[]
 }

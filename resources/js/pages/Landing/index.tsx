@@ -6,7 +6,7 @@ import { faFaceFrown, faFaceGrin, faFaceGrinStars, faFaceMeh, faFaceSmile } from
 import Tabs from '@/components/Tabs';
 import ProgressBar from '@/components/ProgressBar';
 import Button from '@/components/Button';
-import { Icon } from '@/components/FontAwesomeIcon';
+import { FaIcon } from '@/components/FontAwesomeIcon';
 import Input from '@/components/Input';
 import { RadioGroup } from '@/components/RadioGroup';
 import { Combobox } from '@/components/Combobox';
@@ -184,7 +184,7 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
                 </h2>
                 <div className="flex justify-between mb-8">
                     {Object.entries(fasIcons).map(([color, icon], index) => (
-                        <Icon
+                        <FaIcon
                             key={index}
                             icon={icon}
                             color={color}

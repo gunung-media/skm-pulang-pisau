@@ -6,6 +6,7 @@ import { getRespondents, RespondentType } from "@/features/Respondent";
 import { toIndonesian } from "@/utils/date";
 import TablePagination from "@/components/TablePagination";
 import { PaginateTableInterface } from "@/interfaces/PaginateTableInterface";
+import { router } from "@inertiajs/react";
 
 const typeTasks = [
     {
@@ -30,8 +31,7 @@ const durations = [
     {
         title: "1W",
         value: "1w",
-    },
-    , {
+    }, {
         title: "1M",
         value: "1m",
     }
@@ -103,7 +103,7 @@ export default function Index() {
                 </thead>
                 <tbody>
                     {paginate?.data.map((item) => (
-                        <tr key={item.id} className="hover:bg-gray-100">
+                        <tr key={item.id} className="hover:bg-gray-100" onClick={() => router.visit(route('admin.respondent.show', item.id))}>
                             <td className="td-custom">{item.name}</td>
                             <td className="td-custom">{toIndonesian(item.created_at!)}</td>
                             <td className="td-custom text-center">{item.age}</td>

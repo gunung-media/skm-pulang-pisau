@@ -19,7 +19,9 @@ class RespondentRepository implements RepositoryInterface
 
     public function findById($id): ?Respondent
     {
-        return $this->respondent->find($id);
+        return $this->respondent
+            ->with('responses.question')
+            ->find($id);
     }
 
     public function create(array $data): Respondent

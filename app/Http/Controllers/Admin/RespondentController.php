@@ -38,8 +38,10 @@ class RespondentController extends Controller
         }
     }
 
-    public function show(string $id): void
+    public function show(string $id): Response
     {
-        //
+        return Inertia::render('Admin/Respondent/Detail/index', [
+            'respondent' => $this->respondentRepository->findById($id)
+        ]);
     }
 }
