@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Sorting from "@/components/Sorting";
 import SimpleTabs from "@/components/SimpleTabs";
 import AuthenticatedLayout from "@/layouts/Authenticated";
-import { PageProps } from "@/types";
 import { getRespondents, RespondentType } from "@/features/Respondent";
 import { toIndonesian } from "@/utils/date";
 import TablePagination from "@/components/TablePagination";
@@ -17,6 +16,10 @@ const typeTasks = [
 
 const durations = [
     {
+        title: "All",
+        value: "all",
+    },
+    {
         title: "1H",
         value: "1h",
     },
@@ -28,19 +31,20 @@ const durations = [
         title: "1W",
         value: "1w",
     },
-    {
-        title: "All",
-        value: "all",
-    },
+    , {
+        title: "1M",
+        value: "1m",
+    }
 ];
+
 export default function Index() {
     const [type, setType] = useState<string>("all-respondent");
-    const [duration, setDuration] = useState<string>("1h");
+    const [duration, setDuration] = useState<string>("all");
     const [paginate, setPaginate] = useState<PaginateTableInterface<RespondentType>>()
 
     const fetchRespondents = async () => {
         try {
-            const data = await getRespondents();
+            const data = await getRespondents(duration);
             setPaginate(data.data)
         } catch (error) {
             console.error('Error fetching respondents:', error);
@@ -50,6 +54,10 @@ export default function Index() {
     useEffect(() => {
         fetchRespondents();
     }, []);
+
+    useEffect(() => {
+        fetchRespondents();
+    }, [duration]);
 
     return (
         <AuthenticatedLayout title="Respondent">

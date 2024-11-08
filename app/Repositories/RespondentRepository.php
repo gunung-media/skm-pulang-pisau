@@ -54,4 +54,32 @@ class RespondentRepository implements RepositoryInterface
     {
         return $this->respondent->where($attributes)->exists();
     }
+
+    public function paginateByHour(): LengthAwarePaginator
+    {
+        return $this->respondent
+            ->where('created_at', '>=', now()->subHour())
+            ->paginate();
+    }
+
+    public function paginateByDay(): LengthAwarePaginator
+    {
+        return $this->respondent
+            ->where('created_at', '>=', now()->subDay())
+            ->paginate();
+    }
+
+    public function paginateByWeek(): LengthAwarePaginator
+    {
+        return $this->respondent
+            ->where('created_at', '>=', now()->subWeek())
+            ->paginate();
+    }
+
+    public function paginateByMonth(): LengthAwarePaginator
+    {
+        return $this->respondent
+            ->where('created_at', '>=', now()->subMonth())
+            ->paginate();
+    }
 }
