@@ -24,7 +24,8 @@ export const FaIcon: FC<{
                         'cursor-pointer hover:scale-150 transition duration-150 transform ',
                         'drop-shadow-[3px_3px_0px_#000] hover:drop-shadow-none',
                         isActive && `scale-150 ${color.split('hover:')[1]} drop-shadow-none`,
-                        disabled && 'cursor-not-allowed hover:scale-100 hover:drop-shadow-[3px_3px_0px_#000] ',
+                        disabled && 'cursor-not-allowed hover:scale-100 drop-shadow-none hover:drop-shadow-none ',
+                        (disabled && isActive) ? '!scale-[2] !hover:scale-[2] drop-shadow-[3px_3px_0px_#000] hover:drop-shadow-[3px_3px_0px_#000]' : ''
                     )
                 }
             />
