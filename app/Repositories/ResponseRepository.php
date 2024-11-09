@@ -58,25 +58,26 @@ class ResponseRepository implements RepositoryInterface
 
     public function avgSatisfaction(string|null $gender): array
     {
-        $avg = $this->response->query();
+        $query = $this->response->query();
+
         $driver = DB::connection()->getDriverName();
 
         $castExpression = match ($driver) {
-            'pgsql' => 'AVG(answer::int)',
-            'mysql' => 'AVG(CAST(answer AS UNSIGNED))',
-            default => 'AVG(CAST(answer AS UNSIGNED))',
+            'pgsql' => 'avg(answer::int) as avg',
+            'mysql' => 'avg(cast(answer AS UNSIGNED)) as avg',
+            default => 'avg(cast(answer AS UNSIGNED)) as avg',
         };
 
-        if ($gender === 'Semua' || $gender === null) {
-            return [
-                'avg' => $avg->select(DB::raw($castExpression))->value('avg'),
-                'count' => $avg->select('respondent_id')->groupBy('respondent_id')->get()->count(),
-            ];
+        if ($gender !== 'Semua' && $gender !== null) {
+            $query->whereRelation('respondent', 'gender', $gender);
         }
 
+        $avg = $query->select(DB::raw($castExpression))->value('avg');
+        $count = $query->select('respondent_id')->groupBy('respondent_id')->get()->count();
+
         return [
-            'avg' => $avg->whereRelation('respondent', 'gender', $gender)->select(DB::raw($castExpression))->value('avg'),
-            'count' => $avg->whereRelation('respondent', 'gender', $gender)->select('respondent_id')->groupBy('respondent_id')->get()->count(),
+            'avg' => $avg ?? 0,
+            'count' => $count,
         ];
     }
 
@@ -143,7 +144,7 @@ class ResponseRepository implements RepositoryInterface
         $query = $this->response->query();
 
         if ($gender !== 'Semua' && $gender !== null) {
-            $query->whereRelation('responses.respondent', 'gender', $gender);
+            $query->whereRelation('respondent', 'gender', $gender);
         }
 
         $distribution = $query
@@ -173,7 +174,7 @@ class ResponseRepository implements RepositoryInterface
         $query = $this->response->query();
 
         if ($gender !== 'Semua' && $gender !== null) {
-            $query->whereRelation('responses.respondent', 'gender', $gender);
+            $query->whereRelation('respondent', 'gender', $gender);
         }
 
         return $query->count();
@@ -186,7 +187,7 @@ class ResponseRepository implements RepositoryInterface
         $query = $this->response->query();
 
         if ($gender !== 'Semua' && $gender !== null) {
-            $query->whereRelation('responses.respondent', 'gender', $gender);
+            $query->whereRelation('respondent', 'gender', $gender);
         }
 
         $trendData = $query
@@ -223,7 +224,7 @@ class ResponseRepository implements RepositoryInterface
         $query = $this->response->query();
 
         if ($gender !== 'Semua' && $gender !== null) {
-            $query->whereRelation('responses.respondent', 'gender', $gender);
+            $query->whereRelation('respondent', 'gender', $gender);
         }
 
         $avgSatisfactionQuery = DB::getDriverName() === 'pgsql'
