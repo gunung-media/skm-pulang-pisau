@@ -62,9 +62,9 @@ class ResponseRepository implements RepositoryInterface
         $driver = DB::connection()->getDriverName();
 
         $castExpression = match ($driver) {
-            'pgsql' => 'AVG(CAST(answer AS INTEGER))',
-            'mysql' => 'AVG(CAST(answer AS SIGNED))',
-            default => 'AVG(CAST(answer AS INT))',
+            'pgsql' => 'AVG(answer::int)',
+            'mysql' => 'AVG(CAST(answer AS UNSIGNED))',
+            default => 'AVG(CAST(answer AS UNSIGNED))',
         };
 
         if ($gender === 'Semua' || $gender === null) {
