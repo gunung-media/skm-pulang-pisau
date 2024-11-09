@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Response;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ResponseRepository implements RepositoryInterface
 {
@@ -53,5 +54,29 @@ class ResponseRepository implements RepositoryInterface
     public function exists(array $attributes): bool
     {
         return $this->response->where($attributes)->exists();
+    }
+
+    public function avgSatisfaction(string|null $gender): array
+    {
+        $avg = $this->response->query();
+        $driver = DB::connection()->getDriverName();
+
+        $castExpression = match ($driver) {
+            'pgsql' => 'AVG(CAST(answer AS INTEGER))',
+            'mysql' => 'AVG(CAST(answer AS SIGNED))',
+            default => 'AVG(CAST(answer AS INT))',
+        };
+
+        if ($gender === 'Semua' || $gender === null) {
+            return [
+                'avg' => $avg->select(DB::raw($castExpression))->value('avg'),
+                'count' => $avg->select('respondent_id')->groupBy('respondent_id')->get()->count(),
+            ];
+        }
+
+        return [
+            'avg' => $avg->whereRelation('respondent', 'gender', $gender)->select(DB::raw($castExpression))->value('avg'),
+            'count' => $avg->whereRelation('respondent', 'gender', $gender)->select('respondent_id')->groupBy('respondent_id')->get()->count(),
+        ];
     }
 }

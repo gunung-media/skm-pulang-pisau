@@ -16,7 +16,8 @@ Route::prefix('/admin')->name('admin.')->namespace('App\Http\Controllers\Admin')
     });
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/', 'DashboardController')->name('dashboard');
+        Route::get('/', 'DashboardController@index')->name('dashboard');
+        Route::get('api/dashboard', 'DashboardController@getData')->name('dashboard.get');
         Route::resource('question', 'QuestionController')->except('show');
         Route::resource('respondent', 'RespondentController')->only(['index', 'show']);
         Route::get('api/respondent', 'RespondentController@getRespondents')->name('respondent.get');
