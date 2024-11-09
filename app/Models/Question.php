@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -26,5 +27,16 @@ class Question extends Model
     public function responses(): HasMany
     {
         return $this->hasMany(Response::class);
+    }
+
+    protected function indexSatisfaction(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->responses()->selectRaw(
+                app('db')->getDriverName() === 'pgsql'
+                    ? 'avg(answer::int) as average'
+                    : 'avg(cast(answer as unsigned)) as average'
+            )->value('average'),
+        );
     }
 }

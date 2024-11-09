@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Question;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\TModel;
+use Illuminate\Support\Facades\DB;
 
 class QuestionRepository implements RepositoryInterface
 {
@@ -61,5 +61,21 @@ class QuestionRepository implements RepositoryInterface
     public function exists(array $attributes): bool
     {
         return $this->question->where($attributes)->exists();
+    }
+
+    public function ranking(string|null $gender): array
+    {
+        $query = $this->question->query();
+
+        if ($gender !== 'Semua' && $gender !== null) {
+            $query->whereRelation('responses.respondent', 'gender', $gender);
+        }
+
+        return $query
+            ->get()
+            ->map(fn($question) => $question->append('index_satisfaction'))
+            ->sortByDesc('index_satisfaction')
+            ->values() // Reset keys after sorting
+            ->toArray();
     }
 }

@@ -1,4 +1,9 @@
+import CardChart from "@/components/CardChart";
+import ChartPie, { ChartData } from "@/components/ChartPie";
+import ChartPolar from "@/components/ChartPolar";
 import Select from "@/components/Select";
+import Sorting from "@/components/Sorting";
+import { QuestionType } from "@/features/Question";
 import AuthenticatedLayout from "@/Layouts/Authenticated";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -8,13 +13,20 @@ type DashboardData = {
     avgSatisfaction: {
         avg: any,
         count: number
-    }
+    },
+    questionRanking: (QuestionType & { index_satisfaction: any })[]
+    answerDistribution: ChartData[],
+    answerResponseCount: number,
+    answerTrend: {
+        name: string,
+        price: number
+    }[]
+
 }
 
 export default function Dashboard() {
     const [genderFilter, setGenderFilter] = useState<GenderFilter>('Semua');
     const [dashboardData, setDashboardData] = useState<DashboardData>()
-
 
     const fetchDashboardData = async () => {
         try {
@@ -23,6 +35,7 @@ export default function Dashboard() {
                     gender: genderFilter
                 }
             });
+            console.log(data)
             setDashboardData(data);
         } catch (error) {
             console.error(error)
@@ -60,6 +73,48 @@ export default function Dashboard() {
                         onChange={(value) => setGenderFilter(value)}
                         small
                     />
+                </div>
+            </div>
+            <div className="flex -mx-2.5 lg:block lg:mx-0">
+                <div className="w-[calc(65%-1.25rem)] mx-2.5 lg:w-full lg:mx-0 lg:mb-5">
+                    <CardChart title="Distribusi Skala Jawaban ">
+                        <ChartPie
+                            data={dashboardData?.answerDistribution ?? []}
+                            count={dashboardData?.answerResponseCount ?? 0}
+                        />
+                    </CardChart>
+                    <CardChart title="Trend Jawaban Selama 6 Bulan Kebelakang" className="mt-5">
+                        <ChartPolar items={dashboardData?.answerTrend ?? []} />
+                    </CardChart>
+                </div>
+                <div className="w-[calc(35%-1.25rem)] mx-2.5 lg:w-full lg:mx-0">
+                    <CardChart title="Peringkat Pertanyaan">
+                        <table className="table-custom !border-none">
+                            <thead className="md:hidden">
+                                <tr>
+                                    <th className="th-custom">
+                                        <Sorting title="No" />
+                                    </th>
+                                    <th className="th-custom">
+                                        <Sorting title="Pertanyan" />
+                                    </th>
+                                    <th className="th-custom">
+                                        <Sorting title="Indeks" />
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {dashboardData?.questionRanking.map((question, index) => (
+                                    <tr key={question.id}>
+                                        <td className="td-custom">{index + 1}</td>
+                                        <td className="td-custom">{question.question}</td>
+                                        <td className="td-custom">{parseFloat(question.index_satisfaction).toFixed(2)}</td>
+                                    </tr>
+                                ))}
+
+                            </tbody>
+                        </table>
+                    </CardChart>
                 </div>
             </div>
         </AuthenticatedLayout>
