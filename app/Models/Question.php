@@ -20,7 +20,6 @@ class Question extends Model
     ];
 
     protected $casts = [
-        'custom_answers' => 'array',
         'is_active' => 'boolean'
     ];
 
@@ -37,6 +36,13 @@ class Question extends Model
                     ? 'avg(answer::int) as average'
                     : 'avg(cast(answer as unsigned)) as average'
             )->value('average'),
+        );
+    }
+
+    protected function customAnswers(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => is_null($value) ? ["Sangat Buruk", "Buruk", "Bagus", "Sangat Bagus"] : $value,
         );
     }
 }

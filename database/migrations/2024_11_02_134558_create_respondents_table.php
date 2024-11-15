@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('respondents', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->enum('gender', ['Pria', 'Wanita']);
             $table->string('education');
             $table->string('jobs');
             $table->integer('age');
-            $table->string('type_of_service')->nullable();
+            $table->string('type_of_service');
+            $table->string('suggestion')->nullable();
             $table->timestamps();
         });
     }

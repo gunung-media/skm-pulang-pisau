@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('question');
             $table->integer('position');
             $table->boolean('is_active')->default(true);
-            $table->integer('number_of_answers')->default(5);
+            $table->integer('number_of_answers')->default(4);
             $table->json('custom_answers')->nullable();
             $table->timestamps();
         });
