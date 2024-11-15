@@ -9,6 +9,7 @@ type ProgressBarType = {
     showPercentage?: boolean;
     className?: string;
     currentValue?: number;
+    showStep?: boolean
 };
 
 const ProgressBar = ({
@@ -18,6 +19,7 @@ const ProgressBar = ({
     color = "cyan",
     currentValue = 0,
     showPercentage = true,
+    showStep = false,
     disabled,
     className,
 }: ProgressBarType) => {
@@ -85,6 +87,20 @@ const ProgressBar = ({
                         {Math.round(widthPercentage)}%
                     </h1>
                 )}
+
+                {showStep && !disabled && (
+                    <h1
+                        className={cn(
+                            "mr-2",
+                            widthPercentage !== 100 ? "font-bold" : "font-black",
+                            widthPercentage !== 100 ? "opacity-60" : "opacity-100",
+                            className
+                        )}
+                    >
+                        {currentValue}/{maxValue}
+                    </h1>
+                )}
+
             </div>
         </div>
     );
