@@ -8,7 +8,7 @@ import AuthenticatedLayout from "@/Layouts/Authenticated";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-type GenderFilter = 'Semua' | 'Pria' | 'Perempuan';
+type GenderFilter = 'Semua' | 'Pria' | 'Wanita';
 type DashboardData = {
     avgSatisfaction: {
         avg: any,
@@ -68,7 +68,7 @@ export default function Dashboard() {
                         classButton="h-auto px-0 border-none bg-trasparent"
                         classOptions="-left-4 -right-3 w-24 py-1"
                         classArrow="ml-1"
-                        items={['Semua', 'Pria', 'Perempuan']}
+                        items={['Semua', 'Pria', 'Wanita']}
                         value={genderFilter}
                         onChange={(value) => setGenderFilter(value)}
                         small

@@ -73,7 +73,7 @@ class ResponseRepository implements RepositoryInterface
         }
 
         $avg = $query->select(DB::raw($castExpression))->value('avg');
-        $count = $query->select('respondent_id')->groupBy('respondent_id')->get()->count();
+        $count = $query->distinct('respondent_id')->count('respondent_id');
 
         return [
             'avg' => $avg ?? 0,
