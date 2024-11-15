@@ -18,6 +18,7 @@ class Respondent extends Model
         'age',
         'jobs',
         'type_of_service',
+        'suggestion'
     ];
 
     protected $appends = ['index_satisfaction'];

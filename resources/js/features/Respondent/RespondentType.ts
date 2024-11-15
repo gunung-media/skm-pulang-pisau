@@ -7,7 +7,8 @@ export interface RespondentType extends BaseTableInterface {
     education: string,
     age: number,
     jobs: string,
-    type_of_service?: string,
+    type_of_service: string,
     index_satisfaction?: string
     responses?: ResponseType[]
+    suggestion?: string
 }

@@ -1,51 +1,58 @@
 import { QuestionType } from '@/features/Question';
-import { RespondentDto, respondentKeys } from '@/features/Respondent';
+import { RespondentDto } from '@/features/Respondent';
 import { PageProps } from '@/types';
-import { ChangeEvent, FormEventHandler, useEffect, useState } from 'react';
-import { faFaceFrown, faFaceGrin, faFaceGrinStars, faFaceMeh, faFaceSmile } from '@fortawesome/free-solid-svg-icons';
-import Tabs from '@/components/Tabs';
+import { FormEventHandler, useEffect, useState } from 'react';
 import ProgressBar from '@/components/ProgressBar';
 import Button from '@/components/Button';
-import { FaIcon } from '@/components/FontAwesomeIcon';
-import Input from '@/components/Input';
-import { RadioGroup } from '@/components/RadioGroup';
-import { Combobox } from '@/components/Combobox';
-import { Form } from '@/components/Form';
 import { ResponseDto } from '@/features/Response';
 import './styles.css';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { useToast } from '@/components/Toast';
-
-enum TabEnum {
-    PERSONAL = 'Data Diri',
-    SURVEY = 'Survey'
-}
+import axios from 'axios';
+import OptionAnswer from './Components/OptionAnswer';
+import Textarea from '@/components/Textarea';
 
 const fasIcons = {
-    'text-red-500 hover:text-red-700': faFaceFrown,
-    'text-yellow-500 hover:text-yellow-700': faFaceMeh,
-    'text-green-500 hover:text-green-700': faFaceSmile,
-    'text-blue-500 hover:text-blue-700': faFaceGrin,
-    'text-purple-500 hover:text-purple-700': faFaceGrinStars
+    'text-red-500 ': 'Frown',
+    'text-yellow-500 ': 'Meh',
+    'text-blue-500 ': 'Smile',
+    'text-purple-500 ': 'Laugh'
 };
 
 const defaultRespondent: RespondentDto = {
-    name: '',
+    name: 'Admin',
     age: 0,
     gender: '',
     education: '',
-    jobs: ''
+    jobs: '',
+    type_of_service: '',
+    suggestion: ''
 }
 
-export default function UserSatisfactionSurvey({ questions }: PageProps & { questions: QuestionType[] }) {
-    const { errors } = usePage<PageProps>().props
+type StaticData = {
+    ages: Record<string, string>,
+    educations: Record<string, string>,
+    jobs: Record<string, string>,
+    services: Record<string, string>,
+}
+
+export default function UserSatisfactionSurvey({ questions, ...props }: PageProps & { questions: QuestionType[] }) {
+    const [isBoarding, setIsBoarding] = useState(true)
     const [currentStep, setCurrentStep] = useState(0);
-    const [activeTab, setActiveTab] = useState(TabEnum.PERSONAL);
     const [respondentData, setRespondentData] = useState<RespondentDto>(defaultRespondent);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [sortedQuestions, setSortedQuestions] = useState<QuestionType[]>([]);
     const [responseData, setResponseData] = useState<ResponseDto[]>([]);
     const { toast, ToastContainer } = useToast()
+    const [staticData, setStaticData] = useState<StaticData>()
+
+    useEffect(() => {
+        const fetchStaticData = async () => {
+            const { data } = await axios.get(route('api.static_data'));
+            setStaticData(data)
+        }
+        fetchStaticData()
+    }, [])
 
     useEffect(() => {
         const activeSortedQuestions = questions
@@ -54,21 +61,62 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
         setSortedQuestions(activeSortedQuestions);
     }, [questions]);
 
-    const handleNextStep = () => setCurrentStep(prev => prev + 1);
+
+    const handleNextStep = () => setCurrentStep(prev => Math.min(prev + 1, sortedQuestions.length - 1 + 6));
 
     const handleNextQuestion = () => setCurrentQuestion((prev) => Math.min(prev + 1, sortedQuestions.length - 1));
 
-    const handlePreviousQuestion = () => setCurrentQuestion((prev) => Math.max(prev - 1, 0));
+    const deteminatorRespondentData = (): {
+        title: string;
+        data?: Record<string, string>;
+        onClick: (value: string) => void;
+    } => {
+        switch (currentStep) {
+            case 1:
+                return {
+                    title: "Silahkan Pilih Jenis Kelamin",
+                    data: {
+                        'Pria': 'CircleArrowDown',
+                        'Wanita': 'CircleArrowOutUpRight'
+                    },
+                    onClick: (value: string) => setRespondentData({ ...respondentData, gender: value })
+                }
+            case 2:
+                return {
+                    title: "Silahkan Pilih Usia",
+                    data: staticData?.ages,
+                    onClick: (value: string) => setRespondentData({ ...respondentData, age: parseInt(value) })
+                }
 
-    const handleRespondentDataChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setRespondentData((prev) => ({ ...prev, [name]: value }));
-    };
+            case 3:
+                return {
+                    title: "Silahkan Pilih Pendidikan",
+                    data: staticData?.educations,
+                    onClick: (value: string) => setRespondentData({ ...respondentData, education: value })
+                }
+
+            case 4:
+                return {
+                    title: "Silahkan Pilih Jenis Layanan",
+                    data: staticData?.services,
+                    onClick: (value: string) => setRespondentData({ ...respondentData, type_of_service: value })
+                }
+
+            default:
+                return {
+                    title: 'Silahkan Pilih Jenis Profesi Anda',
+                    data: staticData?.jobs,
+                    onClick: (value: string) => setRespondentData({ ...respondentData, jobs: value })
+                }
+        }
+
+    }
 
     const handleSelectAnswer = (answer: number) => {
         const updatedResponses = responseData.filter((response) => response.question_id !== sortedQuestions[currentQuestion].id);
         setResponseData([...updatedResponses, { question_id: sortedQuestions[currentQuestion].id, answer: answer.toString() }]);
-        handleNextQuestion();
+        handleNextStep()
+        handleNextQuestion()
     };
 
     const handleSubmit: FormEventHandler = (e) => {
@@ -77,10 +125,8 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
             ...respondentData,
             response: responseData.map((response) => ({ question_id: response.question_id, answer: response.answer }))
         }, {
-            onError: (error) => {
-                if (error && Object.keys(error).some(key => respondentKeys.includes(key as any))) {
-                    setActiveTab(TabEnum.PERSONAL)
-                }
+            onError: (e) => {
+                console.log(e)
                 toast(
                     'Gagal Menyimpan',
                     'Ada beberapa input yang belum sesuai!'
@@ -94,136 +140,98 @@ export default function UserSatisfactionSurvey({ questions }: PageProps & { ques
     }
 
     const handleReset = () => {
+        setIsBoarding(true)
         setCurrentStep(0)
-        setActiveTab(TabEnum.PERSONAL)
+        setCurrentQuestion(0)
         setRespondentData(defaultRespondent)
         setResponseData([])
     }
 
-    const renderPersonal = () => (
-        <div className="w-full mt-5 ">
-            <h2 className="text-3xl font-heading tracking-wide">Lengkapi Data Diri Anda!</h2>
-            <p className="text-base font-base tracking-wide">Mari Berkenalan! Isi Data Diri Anda untuk Membantu Kami Lebih Baik Lagi</p>
-            <Form label="Nama Lengkap" error={errors.name}>
-                <Input
-                    name="name"
-                    value={respondentData.name}
-                    setValue={handleRespondentDataChange}
-                    placeholder="Nama Anda"
-                    className="w-full"
-                />
-            </Form>
-            <div className="flex w-full gap-3">
-                <Form label="Jenis Kelamin" className="w-1/2" error={errors.gender}>
-                    <RadioGroup
-                        items={['Pria', 'Wanita']}
-                        value={respondentData.gender}
-                        onChange={(value) => setRespondentData({ ...respondentData, gender: value })}
-                    />
-                </Form>
-                <Form label="Umur" className="w-1/2" error={errors.age}>
-                    <Input
-                        name="age"
-                        value={respondentData.age.toString()}
-                        setValue={handleRespondentDataChange}
-                        placeholder="Umur Anda"
-                        className="w-full"
-                    />
-                </Form>
-            </div>
-            <div className="flex w-full gap-3">
-                <Form label="Edukasi" className="w-full" error={errors.education}>
-                    <Combobox
-                        name="Edukasi"
-                        items={['SD', 'SMP', 'SMA', 'Diploma', 'S1', 'S2', 'S3']}
-                        onChange={(value) => setRespondentData({ ...respondentData, education: value })}
-                        baseValue={respondentData.education}
-                    />
-                </Form>
-                <Form label="Pekerjaan" className="w-full" error={errors.jobs}>
-                    <Combobox
-                        name="Pekerjaan"
-                        items={['PNS', 'Pegawai Swasta', 'Wiraswasta', 'Pelajar/Mahasiswa', 'Lainnya']} onChange={(value) => setRespondentData({ ...respondentData, jobs: value })}
-                        baseValue={respondentData.jobs}
-                    />
-                </Form>
-            </div>
-            <Form label="Jenis Layanan yang diterima" error={errors.type_of_service}>
-                <Input
-                    name="type_of_service"
-                    value={respondentData.type_of_service ?? ""}
-                    setValue={handleRespondentDataChange}
-                    placeholder="Jenis Layanan yang diterima"
-                    className="w-full"
-                />
-            </Form>
-        </div>
-    );
-
-    const renderSurvey = () => {
-        const isNotSufficient = errors.response && responseData.length !== sortedQuestions.length
-        return (
-            <div className="flex flex-col justify-between">
-                <div className="w-full">
-                    <ProgressBar
-                        maxValue={sortedQuestions.length}
-                        currentValue={responseData.length}
-                        rounded="full"
-                        color={isNotSufficient ? 'red' : 'cyan'}
-                    />
-                    <div className='flex justify-between'>
-                        <p className='text-red-500 font-semibold p-1'>{isNotSufficient ? "Isi semua pertanyaan!" : null}</p>
-                        <p className="text-black font-semibold p-1 text-right">
-                            Pertanyaan {currentQuestion + 1} dari {sortedQuestions.length}
-                        </p>
-
-                    </div>
-                </div>
-                <h2 className="text-3xl font-bold mb-6 text-black uppercase tracking-wide text-center">
-                    {sortedQuestions[currentQuestion].question}
-                </h2>
-                <div className="flex justify-between mb-8">
-                    {Object.entries(fasIcons).map(([color, icon], index) => (
-                        <FaIcon
-                            key={index}
-                            icon={icon}
-                            color={color}
-                            isActive={!!responseData.find((response) => response.question_id === sortedQuestions[currentQuestion].id && response.answer === index.toString())}
-                            onClick={() => handleSelectAnswer(index + 1)}
-                        />
-                    ))}
-                </div>
-                <div className="w-full flex justify-between">
-                    <Button onClick={handlePreviousQuestion}>Soal Sebelumnya</Button>
-                    {currentQuestion === sortedQuestions.length - 1 ? (
-                        <Button onClick={handleSubmit} className="bg-green-500">Simpan</Button>
-                    ) : (
-                        <Button onClick={handleNextQuestion}>Soal Berikutnya</Button>
-                    )}
-                </div>
-            </div>
-        )
-    };
-
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-grid font-sans">
 
-            <Head title='FeedbackHub' />
+            <Head title={props.appName} />
 
-            {currentStep === 0 ? (
+            {isBoarding ? (
                 <div className="bg-blue-100 border-4 border-black p-10 text-center max-w-lg mx-auto">
-                    <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">FeedbackHub</h1>
+                    <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">{props.appName}</h1>
                     <p className="text-md mb-8 text-black font-base">Kami mendengarkan setiap masukan dengan seksama, memahami kebutuhan Anda, dan berkomitmen untuk terus meningkatkan kualitas layanan kami demi kepuasan Anda.</p>
                     <center>
-                        <Button onClick={handleNextStep}>Mulai Survey</Button>
+                        <Button onClick={() => setIsBoarding(false)}>Mulai Survey</Button>
                     </center>
                 </div>
             ) : (
-                <div className="max-w-[50rem] rounded-base w-full">
-                    <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabsArray={[TabEnum.PERSONAL, TabEnum.SURVEY]} />
-                    <div className="max-w-full min-h-[40rem] overflow-y-auto rounded-b-base border-2 border-border bg-white p-5 font-base flex justify-center">
-                        {activeTab === TabEnum.PERSONAL && renderPersonal()}
-                        {activeTab === TabEnum.SURVEY && renderSurvey()}
+                <div className="max-w-[70rem] rounded-base w-full">
+                    <div className="max-w-full min-h-[30rem] overflow-y-auto rounded-b-base border-2 border-border bg-white p-5 font-base ">
+                        <ProgressBar
+                            currentValue={currentStep + 1}
+                            maxValue={sortedQuestions.length + 6}
+                            rounded="full"
+                            color='cyan'
+                            showStep={true}
+                            showPercentage={false}
+                        />
+                        {
+                            currentStep < 5
+                                ?
+                                <div className="w-full p-10 flex flex-col justify-center items-center m-auto">
+                                    <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">{deteminatorRespondentData().title}</h2>
+                                    <div className='flex justify-center m-auto flex-wrap w-full gap-10'>
+                                        {deteminatorRespondentData().data && Object.entries(deteminatorRespondentData().data!).map(([name, icon], index) => (
+                                            <OptionAnswer
+                                                key={index}
+                                                name={name}
+                                                icon={icon}
+                                                onClick={() => {
+                                                    deteminatorRespondentData().onClick(name)
+                                                    handleNextStep()
+                                                }}
+
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                                : currentStep == sortedQuestions.length + 5
+                                    ?
+                                    <div className="w-full p-10 flex flex-col justify-center items-center m-auto">
+                                        <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">Untuk perbaikan pelayanan kami, silahkan sampaikan saran/keluhan anda di sini:</h2>
+                                        <div className='flex justify-center m-auto flex-wrap w-full gap-10'>
+                                            <Textarea
+                                                value={respondentData.suggestion ?? ''}
+                                                setValue={(e) => setRespondentData({ ...respondentData, suggestion: e.target.value })}
+                                                placeholder='Masukan Saran'
+                                            />
+                                            <Button
+                                                className="px-10"
+                                                onClick={handleSubmit}
+                                            >Simpan</Button>
+                                        </div>
+                                    </div>
+                                    :
+                                    <div className="w-full p-10">
+                                        <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">
+                                            {sortedQuestions[currentQuestion].question}
+                                        </h2>
+                                        <div className="flex justify-center m-auto w-full gap-5">
+                                            {Object.entries(fasIcons).map(([, icon], index) => {
+                                                const currentQuestionData = questions[currentQuestion];
+                                                const customAnswers: string[] = currentQuestionData?.custom_answers
+                                                    ? JSON.parse(currentQuestionData.custom_answers)
+                                                    : []
+
+                                                return (
+                                                    <OptionAnswer
+                                                        key={index}
+                                                        name={customAnswers[index]}
+                                                        icon={icon}
+                                                        onClick={() => handleSelectAnswer(index + 1)}
+
+                                                    />
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                        }
                     </div>
                 </div>
             )}

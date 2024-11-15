@@ -11,6 +11,7 @@ export const respondentKeys = respondentDtoKeys<RespondentDto>({
     education: '',
     age: 0,
     jobs: '',
-    type_of_service: undefined
+    type_of_service: '',
+    suggestion: ''
 });
 

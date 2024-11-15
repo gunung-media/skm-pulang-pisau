@@ -27,18 +27,6 @@ class LandingController extends Controller
 
     public function store(Request $request)
     {
-        $questions = $this->questionRepository->getActive();
-
-        $request->validate([
-            'name' => 'required',
-            'gender' => 'required',
-            'age' => 'required|integer',
-            'education' => 'required',
-            'jobs' => 'required',
-            'type_of_service' => 'required',
-            'response' => "required|array|min:{$questions->count()}"
-        ]);
-
         DB::beginTransaction();
         try {
             $respondent = $this->respondentRepository->create($request->except('response'));
