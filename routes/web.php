@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/static_data', [ApiController::class, 'getStaticData'])->name('api.static_data');
 
 Route::prefix('/')->name('landing')->group(function () {
     Route::get('', [LandingController::class, 'index']);
