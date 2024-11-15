@@ -19,7 +19,6 @@ type InfoMap = {
 const fasIcons = {
     'text-red-500 ': faFaceFrown,
     'text-yellow-500 ': faFaceMeh,
-    'text-green-500 ': faFaceSmile,
     'text-blue-500 ': faFaceGrin,
     'text-purple-500 ': faFaceGrinStars
 };

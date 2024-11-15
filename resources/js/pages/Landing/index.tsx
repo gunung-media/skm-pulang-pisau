@@ -20,7 +20,7 @@ const fasIcons = {
 };
 
 const defaultRespondent: RespondentDto = {
-    name: 'Admin',
+    name: 'User',
     age: 0,
     gender: '',
     education: '',
