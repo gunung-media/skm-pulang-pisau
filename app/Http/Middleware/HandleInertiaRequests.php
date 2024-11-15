@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'assets' => asset('template'),
             'storageUrl' => asset('storage'),
+            'appName' => config('app.name', 'Laravel'),
             'session' => [
                 'status' => $request->session('status')
             ],
