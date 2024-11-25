@@ -13,8 +13,7 @@ import OptionAnswer from './Components/OptionAnswer';
 import Textarea from '@/components/Textarea';
 import ImgBerakhlak from '@/images/berakhlak.png'
 import ImgBmb from '@/images/bmb.png'
-import ImgG20 from '@/images/g20.jpg'
-import ImgPanrb from '@/images/panrb.png'
+import ImgLogo from '@/images/logo-light.png'
 
 const fasIcons = {
     'text-red-500 ': 'Frown',
@@ -61,7 +60,6 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
     useEffect(() => {
         const activeSortedQuestions = questions
             .filter((question) => question.is_active)
-            .sort((a, b) => a.position - b.position);
         setSortedQuestions(activeSortedQuestions);
     }, [questions]);
 
@@ -154,8 +152,7 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
     return (
         <div className='min-h-screen bg-grid '>
             <div className='border-2 border-black bg-white p-5 mb-20 max-h-[8rem] flex justify-center gap-20'>
-                <img src={ImgPanrb} alt="Panrb" className='h-full max-w-[15%] object-contain' />
-                <img src={ImgG20} alt="g20" className='h-full max-w-[8%] object-contain' />
+                <img src={ImgLogo} alt="berakhlak" className='h-full max-w-[15%] object-contain' />
                 <img src={ImgBerakhlak} alt="berakhlak" className='h-full max-w-[15%] object-contain' />
                 <img src={ImgBmb} alt="Bangga Melayani Bangsa" className='h-full max-w-[15%] object-contain' />
             </div>
