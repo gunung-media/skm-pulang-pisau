@@ -124,21 +124,18 @@ class ResponseRepository implements RepositoryInterface
 
     public function answerDistribution(string|array|null $gender): array
     {
-        // Darker colors for each scale
         $colors = [
-            1 => '#8B0000', // Dark Red
-            2 => '#FF8C00', // Dark Orange
-            3 => '#FFD700', // Gold
-            4 => '#556B2F', // Dark Olive Green
-            5 => '#006400', // Dark Green
+            1 => '#8B0000',
+            2 => '#FF8C00',
+            3 => '#556B2F',
+            4 => '#006400',
         ];
 
         $nameMap = [
             1 => 'Tidak Puas',
             2 => 'Kurang Puas',
-            3 => 'Cukup Puas',
-            4 => 'Puas',
-            5 => 'Sangat Puas',
+            3 => 'Puas',
+            4 => 'Sangat Puas',
         ];
 
         $query = $this->response->query();
@@ -155,7 +152,7 @@ class ResponseRepository implements RepositoryInterface
         $totalResponses = $distribution->sum('count');
 
         $result = [];
-        foreach (range(1, 5) as $scale) {
+        foreach (range(1, 4) as $scale) {
             $count = $distribution->firstWhere('answer', $scale)->count ?? 0;
             $percentage = $totalResponses > 0 ? ($count / $totalResponses) * 100 : 0;
             $result[] = [
@@ -217,7 +214,6 @@ class ResponseRepository implements RepositoryInterface
 
     public function sixMonthSatisfactionTrend(string|array|null $gender): array
     {
-        // Get the current date and calculate the starting date for 6 months back
         $endDate = now();
         $startDate = $endDate->copy()->subMonths(5);
 
@@ -228,12 +224,12 @@ class ResponseRepository implements RepositoryInterface
         }
 
         $avgSatisfactionQuery = DB::getDriverName() === 'pgsql'
-            ? 'ROUND(CAST(AVG(CAST(answer AS FLOAT)) AS NUMERIC), 2)'  // PostgreSQL syntax with explicit numeric cast
-            : 'ROUND(AVG(CAST(answer AS SIGNED)), 2)'; // MySQL syntax
+            ? 'ROUND(CAST(AVG(CAST(answer AS FLOAT)) AS NUMERIC), 2)'
+            : 'ROUND(AVG(CAST(answer AS SIGNED)), 2)';
 
         $monthQuery = DB::getDriverName() === 'pgsql'
-            ? 'EXTRACT(MONTH FROM created_at)'         // PostgreSQL syntax
-            : 'MONTH(created_at)';                     // MySQL syntax
+            ? 'EXTRACT(MONTH FROM created_at)'
+            : 'MONTH(created_at)';
 
         $trendData = $query
             ->select(
@@ -245,7 +241,6 @@ class ResponseRepository implements RepositoryInterface
             ->orderBy('month')
             ->get();
 
-        // Prepare the result array with the past 6 months
         $monthlyTrend = [];
         for ($monthOffset = 0; $monthOffset < 6; $monthOffset++) {
             $month = $startDate->copy()->addMonths($monthOffset)->month;
@@ -255,12 +250,10 @@ class ResponseRepository implements RepositoryInterface
             ];
         }
 
-        // Populate with actual data from the query
         foreach ($trendData as $data) {
             $monthlyTrend[$data->month]['price'] = $data->avg_satisfaction;
         }
 
-        // Convert to a sorted array by month for the frontend
         return array_values($monthlyTrend);
     }
 }
