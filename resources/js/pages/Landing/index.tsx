@@ -11,6 +11,10 @@ import { useToast } from '@/components/Toast';
 import axios from 'axios';
 import OptionAnswer from './Components/OptionAnswer';
 import Textarea from '@/components/Textarea';
+import ImgBerakhlak from '@/images/berakhlak.png'
+import ImgBmb from '@/images/bmb.png'
+import ImgG20 from '@/images/g20.jpg'
+import ImgPanrb from '@/images/panrb.png'
 
 const fasIcons = {
     'text-red-500 ': 'Frown',
@@ -148,95 +152,103 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-grid font-sans">
+        <div className='min-h-screen bg-grid '>
+            <div className='border-2 border-black bg-white p-5 mb-20 max-h-[8rem] flex justify-center gap-20'>
+                <img src={ImgPanrb} alt="Panrb" className='h-full max-w-[15%] object-contain' />
+                <img src={ImgG20} alt="g20" className='h-full max-w-[8%] object-contain' />
+                <img src={ImgBerakhlak} alt="berakhlak" className='h-full max-w-[15%] object-contain' />
+                <img src={ImgBmb} alt="Bangga Melayani Bangsa" className='h-full max-w-[15%] object-contain' />
+            </div>
 
             <Head title={props.appName} />
-
-            {isBoarding ? (
-                <div className="bg-blue-100 border-4 border-black p-10 text-center max-w-lg mx-auto">
-                    <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">{props.appName}</h1>
-                    <p className="text-md mb-8 text-black font-base">Kami mendengarkan setiap masukan dengan seksama, memahami kebutuhan Anda, dan berkomitmen untuk terus meningkatkan kualitas layanan kami demi kepuasan Anda.</p>
-                    <center>
-                        <Button onClick={() => setIsBoarding(false)}>Mulai Survey</Button>
-                    </center>
-                </div>
-            ) : (
-                <div className="max-w-[70rem] rounded-base w-full">
-                    <div className="max-w-full min-h-[30rem] overflow-y-auto rounded-b-base border-2 border-border bg-white p-5 font-base ">
-                        <ProgressBar
-                            currentValue={currentStep + 1}
-                            maxValue={sortedQuestions.length + 6}
-                            rounded="full"
-                            color='cyan'
-                            showStep={true}
-                            showPercentage={false}
-                        />
-                        {
-                            currentStep < 5
-                                ?
-                                <div className="w-full p-10 flex flex-col justify-center items-center m-auto">
-                                    <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">{deteminatorRespondentData().title}</h2>
-                                    <div className='flex justify-center m-auto flex-wrap w-full gap-10'>
-                                        {deteminatorRespondentData().data && Object.entries(deteminatorRespondentData().data!).map(([name, icon], index) => (
-                                            <OptionAnswer
-                                                key={index}
-                                                name={name}
-                                                icon={icon}
-                                                onClick={() => {
-                                                    deteminatorRespondentData().onClick(name)
-                                                    handleNextStep()
-                                                }}
-
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                                : currentStep == sortedQuestions.length + 5
+            <div className="flex flex-col items-center justify-center  font-sans">
+                {isBoarding ? (
+                    <div className="bg-blue-100 border-4 border-black p-10 text-center max-w-lg mx-auto">
+                        <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">{props.appName}</h1>
+                        <p className="text-md mb-8 text-black font-base">Kami mendengarkan setiap masukan dengan seksama, memahami kebutuhan Anda, dan berkomitmen untuk terus meningkatkan kualitas layanan kami demi kepuasan Anda.</p>
+                        <center>
+                            <Button onClick={() => setIsBoarding(false)}>Mulai Survey</Button>
+                        </center>
+                    </div>
+                ) : (
+                    <div className="max-w-[70rem] rounded-base w-full">
+                        <div className="max-w-full min-h-[30rem] overflow-y-auto rounded-b-base border-2 border-border bg-white p-5 font-base ">
+                            <ProgressBar
+                                currentValue={currentStep + 1}
+                                maxValue={sortedQuestions.length + 6}
+                                rounded="full"
+                                color='cyan'
+                                showStep={true}
+                                showPercentage={false}
+                            />
+                            {
+                                currentStep < 5
                                     ?
                                     <div className="w-full p-10 flex flex-col justify-center items-center m-auto">
-                                        <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">Untuk perbaikan pelayanan kami, silahkan sampaikan saran/keluhan anda di sini:</h2>
+                                        <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">{deteminatorRespondentData().title}</h2>
                                         <div className='flex justify-center m-auto flex-wrap w-full gap-10'>
-                                            <Textarea
-                                                value={respondentData.suggestion ?? ''}
-                                                setValue={(e) => setRespondentData({ ...respondentData, suggestion: e.target.value })}
-                                                placeholder='Masukan Saran'
-                                            />
-                                            <Button
-                                                className="px-10"
-                                                onClick={handleSubmit}
-                                            >Simpan</Button>
+                                            {deteminatorRespondentData().data && Object.entries(deteminatorRespondentData().data!).map(([name, icon], index) => (
+                                                <OptionAnswer
+                                                    key={index}
+                                                    name={name}
+                                                    icon={icon}
+                                                    onClick={() => {
+                                                        deteminatorRespondentData().onClick(name)
+                                                        handleNextStep()
+                                                    }}
+
+                                                />
+                                            ))}
                                         </div>
                                     </div>
-                                    :
-                                    <div className="w-full p-10">
-                                        <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">
-                                            {sortedQuestions[currentQuestion].question}
-                                        </h2>
-                                        <div className="flex justify-center m-auto w-full gap-5">
-                                            {Object.entries(fasIcons).map(([, icon], index) => {
-                                                const currentQuestionData = questions[currentQuestion];
-                                                const customAnswers: string[] = currentQuestionData?.custom_answers
-                                                    ? JSON.parse(currentQuestionData.custom_answers)
-                                                    : []
-
-                                                return (
-                                                    <OptionAnswer
-                                                        key={index}
-                                                        name={customAnswers[index]}
-                                                        icon={icon}
-                                                        onClick={() => handleSelectAnswer(index + 1)}
-
-                                                    />
-                                                );
-                                            })}
+                                    : currentStep == sortedQuestions.length + 5
+                                        ?
+                                        <div className="w-full p-10 flex flex-col justify-center items-center m-auto">
+                                            <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">Untuk perbaikan pelayanan kami, silahkan sampaikan saran/keluhan anda di sini:</h2>
+                                            <div className='flex justify-center m-auto flex-wrap w-full gap-10'>
+                                                <Textarea
+                                                    value={respondentData.suggestion ?? ''}
+                                                    setValue={(e) => setRespondentData({ ...respondentData, suggestion: e.target.value })}
+                                                    placeholder='Masukan Saran'
+                                                />
+                                                <Button
+                                                    className="px-10"
+                                                    onClick={handleSubmit}
+                                                >Simpan</Button>
+                                            </div>
                                         </div>
-                                    </div>
-                        }
+                                        :
+                                        <div className="w-full p-10">
+                                            <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">
+                                                {sortedQuestions[currentQuestion].question}
+                                            </h2>
+                                            <div className="flex justify-center m-auto w-full gap-5">
+                                                {Object.entries(fasIcons).map(([, icon], index) => {
+                                                    const currentQuestionData = questions[currentQuestion];
+                                                    const customAnswers: string[] = currentQuestionData?.custom_answers
+                                                        ? JSON.parse(currentQuestionData.custom_answers)
+                                                        : []
+
+                                                    return (
+                                                        <OptionAnswer
+                                                            key={index}
+                                                            name={customAnswers[index]}
+                                                            icon={icon}
+                                                            onClick={() => handleSelectAnswer(index + 1)}
+
+                                                        />
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                            }
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
 
-            {ToastContainer}
+                {ToastContainer}
+            </div>
+
         </div>
     );
 }
