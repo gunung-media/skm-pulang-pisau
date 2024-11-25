@@ -18,4 +18,14 @@ enum AgeEnum: string
             self::LANSIA => 'UserCheck',
         };
     }
+
+    public function fill(): string
+    {
+        return match ($this) {
+            self::PEMUDA => '#4CAF50',    // Green for youth
+            self::DEWASA => '#2196F3',    // Blue for adult
+            self::TUA => '#FF9800',       // Orange for middle-aged
+            self::LANSIA => '#9C27B0',    // Purple for elderly
+        };
+    }
 }

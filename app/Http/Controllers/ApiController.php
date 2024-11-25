@@ -16,8 +16,7 @@ class ApiController extends Controller
             return [];
         }
 
-        return collect($enumClass::cases())->map(fn($case) => [$case->value => $case->icon()])
-            ->mapWithKeys(fn($item) => $item)
+        return collect($enumClass::cases())->map(fn($case) => ['title' => $case->value, 'icon' => $case->icon(), 'fill' => $case->fill()])
             ->toArray();
     }
 

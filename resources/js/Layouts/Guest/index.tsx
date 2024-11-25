@@ -11,7 +11,7 @@ type LayoutProps = {
 const GuestLayout = ({ children }: LayoutProps) => {
     return (
         <>
-            <Head><title>Bruddle</title></Head>
+            <Head><title>Login</title></Head>
             <div className="relative overflow-hidden">
                 <div className="relative z-3 flex flex-col max-w-[75rem] min-h-screen mx-auto px-7.5 py-12 xls:px-20 lg:px-8 md:px-6 md:py-8">
                     <div className="flex flex-col grow max-w-[27.31rem] lg:max-w-[25rem]">

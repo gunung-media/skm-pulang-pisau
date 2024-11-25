@@ -1,5 +1,6 @@
 .bg-grid {
-    background-image: linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-        linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: url("@/images/bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }

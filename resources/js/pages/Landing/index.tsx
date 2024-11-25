@@ -15,12 +15,12 @@ import ImgBerakhlak from '@/images/berakhlak.png'
 import ImgBmb from '@/images/bmb.png'
 import ImgLogo from '@/images/logo-light.png'
 
-const fasIcons = {
-    'text-red-500 ': 'Frown',
-    'text-yellow-500 ': 'Meh',
-    'text-blue-500 ': 'Smile',
-    'text-purple-500 ': 'Laugh'
-};
+const fasIcons = [
+    { fill: 'red', variant: 'Frown', customCss: 'text-white' },
+    { fill: 'yellow', variant: 'Meh', customCss: 'text-black' },
+    { fill: 'blue', variant: 'Smile', customCss: 'text-white' },
+    { fill: 'green', variant: 'Laugh', customCss: 'text-white' }
+];
 
 const defaultRespondent: RespondentDto = {
     name: 'User',
@@ -31,12 +31,15 @@ const defaultRespondent: RespondentDto = {
     type_of_service: '',
     suggestion: ''
 }
+type StaticType = {
+    icon: string, title: string, fill: string
+}
 
 type StaticData = {
-    ages: Record<string, string>,
-    educations: Record<string, string>,
-    jobs: Record<string, string>,
-    services: Record<string, string>,
+    ages: StaticType[],
+    educations: StaticType[],
+    jobs: StaticType[],
+    services: StaticType[],
 }
 
 export default function UserSatisfactionSurvey({ questions, ...props }: PageProps & { questions: QuestionType[] }) {
@@ -70,17 +73,17 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
 
     const deteminatorRespondentData = (): {
         title: string;
-        data?: Record<string, string>;
+        data?: StaticType[];
         onClick: (value: string) => void;
     } => {
         switch (currentStep) {
             case 1:
                 return {
                     title: "Silahkan Pilih Jenis Kelamin",
-                    data: {
-                        'Pria': 'CircleArrowDown',
-                        'Wanita': 'CircleArrowOutUpRight'
-                    },
+                    data: [
+                        { title: 'Pria', icon: 'CircleArrowDown', fill: 'blue' },
+                        { title: 'Wanita', icon: 'CircleArrowOutUpRight', fill: 'red' }
+                    ],
                     onClick: (value: string) => setRespondentData({ ...respondentData, gender: value })
                 }
             case 2:
@@ -150,18 +153,19 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
     }
 
     return (
-        <div className='min-h-screen bg-grid '>
-            <div className='border-2 border-black bg-white p-5 mb-20 max-h-[8rem] flex justify-center gap-20'>
+        <div className='min-h-screen bg-grid relative'>
+            <div className="absolute inset-0 bg-black opacity-10 z-10"></div>
+            <div className='relative border-b-2 border-border bg-white p-5 mb-20 max-h-[8rem] flex justify-center gap-20 z-20'>
                 <img src={ImgLogo} alt="berakhlak" className='h-full max-w-[15%] object-contain' />
                 <img src={ImgBerakhlak} alt="berakhlak" className='h-full max-w-[15%] object-contain' />
                 <img src={ImgBmb} alt="Bangga Melayani Bangsa" className='h-full max-w-[15%] object-contain' />
             </div>
 
             <Head title={props.appName} />
-            <div className="flex flex-col items-center justify-center  font-sans">
+            <div className="relative flex flex-col items-center justify-center  font-sans z-20">
                 {isBoarding ? (
-                    <div className="bg-blue-100 border-4 border-black p-10 text-center max-w-lg mx-auto">
-                        <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">{props.appName}</h1>
+                    <div className="bg-white border-2 border-border text-center mx-auto max-w-[70rem] rounded-base w-full min-h-[30rem] flex flex-col items-center justify-center px-10 font-base">
+                        <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">Indeks Kepuasan Masyrakat Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu <span className='text-emerald-500 font-black italic'>Kab. Pulang Pisau</span></h1>
                         <p className="text-md mb-8 text-black font-base">Kami mendengarkan setiap masukan dengan seksama, memahami kebutuhan Anda, dan berkomitmen untuk terus meningkatkan kualitas layanan kami demi kepuasan Anda.</p>
                         <center>
                             <Button onClick={() => setIsBoarding(false)}>Mulai Survey</Button>
@@ -184,13 +188,14 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
                                     <div className="w-full p-10 flex flex-col justify-center items-center m-auto">
                                         <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">{deteminatorRespondentData().title}</h2>
                                         <div className='flex justify-center m-auto flex-wrap w-full gap-10'>
-                                            {deteminatorRespondentData().data && Object.entries(deteminatorRespondentData().data!).map(([name, icon], index) => (
+                                            {deteminatorRespondentData().data && Object.entries(deteminatorRespondentData().data!).map(([_, { title, icon, fill }], index) => (
                                                 <OptionAnswer
                                                     key={index}
-                                                    name={name}
+                                                    name={title}
                                                     icon={icon}
+                                                    fill={fill}
                                                     onClick={() => {
-                                                        deteminatorRespondentData().onClick(name)
+                                                        deteminatorRespondentData().onClick(title)
                                                         handleNextStep()
                                                     }}
 
@@ -220,7 +225,7 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
                                                 {sortedQuestions[currentQuestion].question}
                                             </h2>
                                             <div className="flex justify-center m-auto w-full gap-5">
-                                                {Object.entries(fasIcons).map(([, icon], index) => {
+                                                {(fasIcons).map(({ fill, variant: icon, customCss }, index) => {
                                                     const currentQuestionData = questions[currentQuestion];
                                                     const customAnswers: string[] = currentQuestionData?.custom_answers
                                                         ? JSON.parse(currentQuestionData.custom_answers)
@@ -231,6 +236,8 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
                                                             key={index}
                                                             name={customAnswers[index]}
                                                             icon={icon}
+                                                            fill={fill}
+                                                            customCss={customCss}
                                                             onClick={() => handleSelectAnswer(index + 1)}
 
                                                         />

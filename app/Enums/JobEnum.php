@@ -24,4 +24,17 @@ enum JobEnum: string
             self::MASYARAKAT => 'Users',    // MASYARAKAT icon
         };
     }
+
+    public function fill(): string
+    {
+        return match ($this) {
+            self::ASN => '#1F77B4',         // Blue for ASN
+            self::TNI => '#2CA02C',         // Green for TNI
+            self::POLRI => '#FF7F0E',       // Orange for POLRI
+            self::SWASTA => '#9467BD',      // Purple for SWASTA
+            self::WIRAUSAHA => '#E377C2',   // Pink for WIRAUSAHA
+            self::MAHASISWA => '#8C564B',   // Brown for MAHASISWA
+            self::MASYARAKAT => '#7F7F7F',  // Grey for MASYARAKAT
+        };
+    }
 }

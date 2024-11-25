@@ -24,4 +24,17 @@ enum ServiceEnum: string
             self::DATA_AND_INFORMATION_SERVICES => 'Database',
         };
     }
+
+    public function fill(): string
+    {
+        return match ($this) {
+            self::CPNS_PPPK_POLICY => '#4CAF50',            // Green for policies
+            self::FORMATION_PROCUREMENT => '#2196F3',      // Blue for procurement
+            self::FUNCTIONAL_POSITION_DETERMINATION => '#FFC107', // Amber for positions
+            self::FUNCTIONAL_ALLOWANCE_DETERMINATION => '#FF5722', // Orange for allowances
+            self::FINANCIAL_RIGHTS_DETERMINATION => '#673AB7',     // Purple for financial rights
+            self::JOB_CLASS_DETERMINATION => '#9C27B0',            // Violet for job classes
+            self::DATA_AND_INFORMATION_SERVICES => '#607D8B',      // Grey-blue for data services
+        };
+    }
 }
