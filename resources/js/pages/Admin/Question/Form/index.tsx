@@ -8,7 +8,12 @@ import { router, useForm } from "@inertiajs/react";
 import { FormEventHandler, useEffect, useState } from "react";
 
 export default function Form({ question }: PageProps & { question?: QuestionType }) {
-    const { data: dto, setData, post } = useForm<QuestionDto>()
+    const { data: dto, setData, post } = useForm<QuestionDto>({
+        question: "",
+        number_of_answers: 4,
+        is_active: true,
+        custom_answers: ["", "", "", ""]
+    })
     const [isEditing, setIsEditing] = useState(false);
     const { toast, ToastContainer } = useToast()
 
@@ -20,7 +25,7 @@ export default function Form({ question }: PageProps & { question?: QuestionType
                 position: question.position,
                 is_active: question.is_active,
                 number_of_answers: question.number_of_answers,
-                custom_answers: question.custom_answers
+                custom_answers: JSON.parse(question.custom_answers ?? "[]")
             }))
         }
     }, [question])
@@ -62,43 +67,65 @@ export default function Form({ question }: PageProps & { question?: QuestionType
     return (
         <AuthenticatedLayout title={isEditing ? "Edit Pertanyaan" : "Buat Pertanyaan"} back={route('admin.question.index')}>
             <form
-                className="max-w-[30.625rem] w-full mx-auto py-4"
+                className="max-w-[50.625rem] w-full mx-auto py-4"
                 action=""
                 onSubmit={handleSubmit}
             >
-                <Field
-                    className="mb-5"
-                    label="Pertanyaan"
-                    placeholder="Masukan pertanyaan..."
-                    value={dto?.question}
-                    onChange={(e: any) => setData('question', e.target.value)}
-                    required
-                />
-                <Field
-                    className="mb-5"
-                    label="Posisi"
-                    placeholder="Masukan posisi..."
-                    value={dto?.position?.toString()}
-                    type="number"
-                    onChange={(e: any) => setData('position', e.target.value)}
-                    required
-                />
+                <div className="flex justify-between gap-5">
+                    <div className="w-full">
+                        <div className="flex items-center text-h4">
+                            <div className="flex-grow border-t border-black"></div>
+                            <span className="mx-4">Pertanyaan</span>
+                            <div className="flex-grow border-t border-black"></div>
+                        </div>
+                        <Field
+                            className="mb-5"
+                            label="Pertanyaan"
+                            placeholder="Masukan pertanyaan..."
+                            value={dto?.question}
+                            onChange={(e: any) => setData('question', e.target.value)}
+                            required
+                        />
+                        <Field
+                            className="mb-5"
+                            label="Jumlah Pertanyaan"
+                            placeholder="Masukan jumlah pertanyaan..."
+                            value={dto?.number_of_answers?.toString() ?? "4"}
+                            type="number"
+                            onChange={(e: any) => setData('position', e.target.value)}
+                            disabled
+                        />
 
-                <Field
-                    className="mb-5"
-                    label="Jumlah Pertanyaan"
-                    placeholder="Masukan jumlah pertanyaan..."
-                    value={dto?.number_of_answers?.toString() ?? "5"}
-                    type="number"
-                    onChange={(e: any) => setData('position', e.target.value)}
-                    disabled
-                />
+                        <ToggleSwitch
+                            label="Apakah tampil?"
+                            isToggled={dto?.is_active ?? true}
+                            setIsToggled={(e) => setData('is_active', e)}
+                        />
+                    </div>
+                    <div className="w-full">
+                        <div className="flex items-center text-h4">
+                            <div className="flex-grow border-t border-black"></div>
+                            <span className="mx-4">Pilihan</span>
+                            <div className="flex-grow border-t border-black"></div>
+                        </div>
 
-                <ToggleSwitch
-                    label="Apakah tampil?"
-                    isToggled={dto?.is_active ?? true}
-                    setIsToggled={(e) => setData('is_active', e)}
-                />
+                        <div className="px-3">
+                            {Array.from({ length: 4 }).map((_, index) => (
+                                <Field
+                                    className="mb-5"
+                                    label={`Pilihan Jawaban ${index + 1}`}
+                                    placeholder={`Bobot ${index + 1}`}
+                                    value={dto.custom_answers?.[index] ?? ""}
+                                    onChange={(e: any) => setData((prev) => ({
+                                        ...prev, custom_answers: [...prev.custom_answers.slice(0, index), e.target.value, ...prev.custom_answers.slice(index + 1)]
+                                    }))}
+                                />
+                            ))}
+                        </div>
+
+                    </div>
+
+                </div>
 
                 <div className="my-5 border-l border-n-1 pb-3.5 dark:border-white ">
                     <div className="text-xs ml-4">

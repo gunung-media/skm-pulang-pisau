@@ -15,13 +15,16 @@ class QuestionRepository implements RepositoryInterface
 
     public function getAll(): Collection
     {
-        return $this->question->all();
+        return $this->question
+            ->orderBy('position', 'asc')
+            ->get();
     }
 
     public function getActive(): Collection
     {
         return $this->question
             ->where('is_active', true)
+            ->orderBy('position', 'asc')
             ->get();
     }
 
@@ -32,7 +35,7 @@ class QuestionRepository implements RepositoryInterface
 
     public function create(array $data): Question
     {
-        return $this->question->create($data);
+        return $this->question->create([...$data, 'position' => ($this->question->max('position') ?? 0) + 1]);
     }
 
     public function update($id, array $data): ?Question

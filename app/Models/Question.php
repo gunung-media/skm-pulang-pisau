@@ -19,9 +19,12 @@ class Question extends Model
         'custom_answers'
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean'
-    ];
+    protected function casts()
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
 
     public function responses(): HasMany
     {
@@ -42,7 +45,8 @@ class Question extends Model
     protected function customAnswers(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => is_null($value) ? ["Sangat Buruk", "Buruk", "Bagus", "Sangat Bagus"] : $value,
+            get: fn($value) => is_null($value) ? json_encode(["Sangat Buruk", "Buruk", "Bagus", "Sangat Bagus"]) : $value,
+            set: fn($value) =>  json_encode($value)
         );
     }
 }
