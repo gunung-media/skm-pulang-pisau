@@ -37,7 +37,7 @@ const OptionAnswer: FC<OptionAnswerProps> = ({ name, icon, onClick, fill, custom
     return (
         <div
             className="
-        w-[20%] px-4 py-3 flex flex-col items-center border border-border bg-white text-gray-800 font-medium hover:bg-gray-100 transition-all"
+        w-[35%] lg:w-[20%] px-4 py-3 flex flex-col items-center border border-border bg-white text-gray-800 font-medium hover:bg-gray-100 transition-all"
             onClick={onClick}
         >
             <LucideIcon

@@ -162,9 +162,9 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
             </div>
 
             <Head title={props.appName} />
-            <div className="relative flex flex-col items-center justify-center  font-sans z-20">
+            <div className="relative flex flex-col items-center justify-center font-sans z-20 mx-10">
                 {isBoarding ? (
-                    <div className="bg-white border-2 border-border text-center mx-auto max-w-[70rem] rounded-base w-full min-h-[30rem] flex flex-col items-center justify-center px-10 font-base">
+                    <div className="bg-white border-2 border-border text-center mx-auto lg:max-w-[70rem] rounded-base w-full min-h-[30rem] flex flex-col items-center justify-center px-10 py-8 lg:py-auto font-base">
                         <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">Indeks Kepuasan Masyrakat Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu <span className='text-emerald-500 font-black italic'>Kab. Pulang Pisau</span></h1>
                         <p className="text-md mb-8 text-black font-base">Kami mendengarkan setiap masukan dengan seksama, memahami kebutuhan Anda, dan berkomitmen untuk terus meningkatkan kualitas layanan kami demi kepuasan Anda.</p>
                         <center>
@@ -224,7 +224,7 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
                                             <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">
                                                 {sortedQuestions[currentQuestion].question}
                                             </h2>
-                                            <div className="flex justify-center m-auto w-full gap-5">
+                                            <div className="flex justify-center m-auto flex-wrap w-full gap-10">
                                                 {(fasIcons).map(({ fill, variant: icon, customCss }, index) => {
                                                     const currentQuestionData = questions[currentQuestion];
                                                     const customAnswers: string[] = currentQuestionData?.custom_answers

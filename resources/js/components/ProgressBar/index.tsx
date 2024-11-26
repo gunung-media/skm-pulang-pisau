@@ -43,7 +43,7 @@ const ProgressBar = ({
             )}
         >
             <div
-                style={{ width: widthPercentage + "%" }}
+                style={{ width: widthPercentage + (currentValue === 1 ? 4 : 0) + "%" }}
                 className={cn(
                     "h-full flex flex-row items-center justify-end overflow-hidden",
                     {

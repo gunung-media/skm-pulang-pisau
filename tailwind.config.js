@@ -13,22 +13,6 @@ export default {
         './resources/**/*.tsx',
     ],
     theme: {
-        screens: {
-            "4xl": { max: "1719px" },
-            // => @media (max-width: 1719px) { ... }
-            "2xl": { max: "1419px" },
-            // => @media (max-width: 1419px) { ... }
-            xl: { max: "1259px" },
-            // => @media (max-width: 1259px) { ... }
-            xls: { max: "1179px" },
-            // => @media (max-width: 1179px) { ... }
-            lg: { max: "1023px" },
-            // => @media (max-width: 1023px) { ... }
-            md: { max: "767px" },
-            // => @media (max-width: 767px) { ... }
-            sm: { max: "480px" },
-            // => @media (max-width: 480px) { ... }
-        },
         extend: {
             colors: {
                 main: '#88aaee',
