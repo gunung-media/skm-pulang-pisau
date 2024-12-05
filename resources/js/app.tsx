@@ -6,7 +6,6 @@ import { createRoot } from 'react-dom/client'
 
 createInertiaApp({
     resolve: (name: string) => {
-        console.log(name)
         const pages = import.meta.glob('./Pages/**/*.tsx', { eager: true }) as Record<string, any>
         return pages[`./Pages/${name}.tsx`]
     },

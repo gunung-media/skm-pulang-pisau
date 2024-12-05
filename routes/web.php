@@ -25,5 +25,10 @@ Route::prefix('/admin')->name('admin.')->namespace('App\Http\Controllers\Admin')
         Route::resource('service', 'ServiceController')->except('show');
         Route::resource('respondent', 'RespondentController')->only(['index', 'show']);
         Route::get('api/respondent', 'RespondentController@getRespondents')->name('respondent.get');
+
+
+        Route::prefix('/report')->name('report.')->group(function () {
+            Route::get('/', 'ReportController@index')->name('index');
+        });
     });
 });

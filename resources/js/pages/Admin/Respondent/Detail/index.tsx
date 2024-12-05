@@ -7,7 +7,7 @@ import { RespondentType } from "@/features/Respondent";
 import { ResponseType } from "@/features/Response";
 import { IconNames } from "@/constants/icon";
 import { toIndonesian } from "@/utils/date";
-import { faFaceFrown, faFaceGrin, faFaceGrinStars, faFaceMeh, faFaceSmile } from '@fortawesome/free-solid-svg-icons';
+import { faFaceFrown, faFaceGrin, faFaceGrinStars, faFaceMeh } from '@fortawesome/free-solid-svg-icons';
 import { FaIcon } from "@/components/FontAwesomeIcon";
 
 type InfoMap = {
@@ -61,8 +61,8 @@ export default function ProjectsDetailsPage({ respondent }: PageProps & { respon
 
     return (
         <AuthenticatedLayout title={`Respondent ${respondent.name}`} back={route('admin.respondent.index')} >
-            <div className="flex card lg:block">
-                <div className="relative shrink-0 w-96 pt-19 px-5 pb-7 border-r border-n-1 4xl:w-80 lg:w-full lg:border-none md:pt-12 dark:border-white">
+            <div className="flex card">
+                <div className="relative shrink-0 w-96 pt-19 px-5 pb-7 border-r border-n-1 4xl:w-80 lg:border-none md:pt-12 dark:border-white">
                     <div className="w-21 h-21 mx-auto mb-3 p-5 bg-background rounded-full">
                         <Image
                             className="w-full"
@@ -107,11 +107,9 @@ export default function ProjectsDetailsPage({ respondent }: PageProps & { respon
                     </div>
                 </div>
                 <div
-                    className={`flex flex-col grow pt-6 pl-10 pr-6 pb-7 lg:fixed lg:inset-0 lg:z-[100] lg:bg-white lg:overflow-auto lg:scroll-smooth lg:py-8 lg:px-5 lg:invisible lg:opacity-0 lg:transition-opacity md:pt-6 dark:bg-n-1 ${visible ? "lg:!visible lg:!opacity-100" : ""
-                        }`}
-                >
+                    className={`flex flex-col grow pt-6 pl-10 pr-6 pb-7 bg-white overflow-auto  scroll-smooth py-8 px-5 transition-opacity md:pt-6 dark:bg-n-1 visible ${visible ? "!opacity-100" : ""}`} >
                     <button
-                        className="hidden items-center mb-6 text-sm font-bold text-purple-1 tap-highlight-color lg:inline-flex"
+                        className="hidden items-center mb-6 text-sm font-bold text-purple-1 tap-highlight-color"
                         onClick={() => setVisible(false)}
                     >
                         <Icon
@@ -141,6 +139,7 @@ export default function ProjectsDetailsPage({ respondent }: PageProps & { respon
                         ))}
                     </div>
                 </div>
+
             </div>
         </AuthenticatedLayout >
     );
