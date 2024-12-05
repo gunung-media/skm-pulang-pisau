@@ -5,5 +5,7 @@ export interface QuestionType extends BaseTableInterface {
     position?: number
     is_active: boolean
     number_of_answers?: number
-    custom_answers?: string
+    custom_answers?: string,
+    question_type_id: number,
+    question_type: QuestionType
 }
