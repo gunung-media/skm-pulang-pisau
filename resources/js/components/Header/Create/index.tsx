@@ -6,9 +6,13 @@ import { IconNames } from "@/constants/icon";
 type CreateProps = {};
 
 const Create = ({ }: CreateProps) => {
-    const buttons: { id: string, title: string, icon: IconNames, onClick: any }[] = [
+    const buttons: { title: string, icon: IconNames, onClick: any }[] = [
         {
-            id: "0",
+            title: "Tipe Pertanyaan",
+            icon: "bag",
+            onClick: () => router.visit(route('admin.questionType.create')),
+        },
+        {
             title: "Pertanyaan",
             icon: "projects",
             onClick: () => router.visit(route('admin.question.create')),
@@ -30,10 +34,10 @@ const Create = ({ }: CreateProps) => {
                 leaveTo="transform scale-95 opacity-0"
             >
                 <Menu.Items className="absolute top-full right-0 w-[14.69rem] mt-2.5 py-2 border border-n-1 rounded-sm bg-white shadow-primary-4 dark:bg-n-1 dark:border-white">
-                    {buttons.map((button) => (
+                    {buttons.map((button, index) => (
                         <Menu.Item
                             className="flex items-center w-full h-10 mb-1.5 px-6.5 text-sm font-bold last:mb-0 transition-colors hover:bg-n-3/10 dark:hover:bg-white/20"
-                            key={button.id}
+                            key={index}
                             as="button"
                             onClick={button.onClick}
                         >

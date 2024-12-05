@@ -84,7 +84,7 @@ export default function Form({ question, questionTypes }: PageProps & { question
                         </div>
                         <Select
                             className="mb-5"
-                            label="Utilities"
+                            label="Tipe Pertanyaan"
                             items={questionTypes.map((item) => ({ name: item.name, value: item.id }))}
                             value={dto?.question_type_id}
                             onChange={(e) => setData('question_type_id', e)}
