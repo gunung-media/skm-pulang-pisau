@@ -19,7 +19,7 @@ const SignIn = () => {
 
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault()
-        router.post(route('admin.login'), data, {
+        router.post(route('admin.login.post'), data, {
             onError: (e) => {
                 toast('Gagal!', Object.values(e).join('<br/>'))
             },

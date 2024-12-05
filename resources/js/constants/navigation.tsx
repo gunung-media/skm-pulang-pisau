@@ -5,6 +5,11 @@ export const navigation = [
         url: route('admin.dashboard'),
     },
     {
+        title: "Tipe Pertanyaan",
+        icon: "projects",
+        url: route('admin.questionType.index'),
+    },
+    {
         title: "Pertanyaan",
         icon: "projects",
         url: route('admin.question.index'),
@@ -16,17 +21,4 @@ export const navigation = [
     },
 ];
 
-export const navigationMobile = [
-    {
-        icon: "dashboard",
-        url: route('admin.dashboard'),
-    },
-    {
-        icon: "projects",
-        url: route('admin.question.index'),
-    },
-    {
-        icon: "tasks",
-        url: route('admin.respondent.index'),
-    },
-];
+export const navigationMobile = navigation.map((item) => ({ icon: item.icon, url: item.url }));
