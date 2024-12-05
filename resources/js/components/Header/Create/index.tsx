@@ -1,11 +1,12 @@
 import { Menu, Transition } from "@headlessui/react";
 import Icon from "@/components/Icon";
 import { router } from "@inertiajs/react";
+import { IconNames } from "@/constants/icon";
 
 type CreateProps = {};
 
 const Create = ({ }: CreateProps) => {
-    const buttons = [
+    const buttons: { id: string, title: string, icon: IconNames, onClick: any }[] = [
         {
             id: "0",
             title: "Pertanyaan",
@@ -15,7 +16,7 @@ const Create = ({ }: CreateProps) => {
     ];
 
     return (
-        <Menu className="relative md:hidden" as="div">
+        <Menu className="relative" as="div">
             <Menu.Button className="btn-purple btn-medium px-5 md:!bg-transparent md:border-none md:w-6 md:h-6 md:p-0 md:text-0">
                 <Icon className="md:!m-0" name="add-circle" />
                 <span>Create new</span>
