@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@admin.com',
         ]);
 
+        $this->call(QuestionTypeSeeder::class);
         $this->call(QuestionSeeder::class);
     }
 }

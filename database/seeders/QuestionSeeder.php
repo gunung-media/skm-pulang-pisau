@@ -14,7 +14,7 @@ class QuestionSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->getQuestions() as $question) {
-            $this->questionRepository->create($question);
+            $this->questionRepository->create([...$question, 'question_type_id' => $question['position']]);
         }
     }
 
