@@ -165,7 +165,7 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
             <div className="relative flex flex-col items-center justify-center font-sans z-20 mx-10">
                 {isBoarding ? (
                     <div className="bg-white border-2 border-border text-center mx-auto lg:max-w-[70rem] rounded-base w-full min-h-[30rem] flex flex-col items-center justify-center px-10 py-8 lg:py-auto font-base">
-                        <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">Indeks Kepuasan Masyrakat Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu <span className='text-emerald-500 font-black italic'>Kab. Pulang Pisau</span></h1>
+                        <h1 className="text-4xl font-extrabold mb-4 text-black tracking-wide">Indeks Kepuasan Masyarakat Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu <span className='text-emerald-500 font-black italic'>Kab. Pulang Pisau</span></h1>
                         <p className="text-md mb-8 text-black font-base">Kami mendengarkan setiap masukan dengan seksama, memahami kebutuhan Anda, dan berkomitmen untuk terus meningkatkan kualitas layanan kami demi kepuasan Anda.</p>
                         <center>
                             <Button onClick={() => setIsBoarding(false)}>Mulai Survey</Button>
