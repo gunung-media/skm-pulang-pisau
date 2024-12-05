@@ -5,6 +5,11 @@ export const navigation = [
         url: route('admin.dashboard'),
     },
     {
+        title: "Jenis Pelayanan",
+        icon: "puzzle",
+        url: route('admin.service.index'),
+    },
+    {
         title: "Tipe Pertanyaan",
         icon: "projects",
         url: route('admin.questionType.index'),

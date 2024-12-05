@@ -8,6 +8,11 @@ type CreateProps = {};
 const Create = ({ }: CreateProps) => {
     const buttons: { title: string, icon: IconNames, onClick: any }[] = [
         {
+            title: "Jenis Pelayanan",
+            icon: "puzzle",
+            onClick: () => router.visit(route('admin.service.create')),
+        },
+        {
             title: "Tipe Pertanyaan",
             icon: "bag",
             onClick: () => router.visit(route('admin.questionType.create')),

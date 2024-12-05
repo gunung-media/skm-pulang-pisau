@@ -1,13 +1,16 @@
 import Icon from "@/components/Icon";
 import Sorting from "@/components/Sorting";
 import { useToast } from "@/components/Toast";
-import { QTType } from "@/features/QuestionType";
+import { ServiceType } from "@/features/Service";
 import AuthenticatedLayout from "@/layouts/Authenticated";
 import { PageProps } from "@/types";
+import { icons } from "lucide-react";
+import calculateLuminance from "@/utils/calculateLuminance";
 import { router } from "@inertiajs/react";
 import { useEffect, useRef, useState } from "react";
+import LucideIcon from "@/components/LucideIcon";
 
-export default function QuestionType({ questionTypes }: PageProps & { questionTypes: QTType[] }) {
+export default function Service({ services }: PageProps & { services: ServiceType[] }) {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const menuRef = useRef<HTMLDivElement | null>(null);
     const { toast, ToastContainer } = useToast();
@@ -30,7 +33,7 @@ export default function QuestionType({ questionTypes }: PageProps & { questionTy
     }, [])
 
     return (
-        <AuthenticatedLayout title="Tipe Pertanyaan">
+        <AuthenticatedLayout title="Jenis Pelayanan">
             <table className="table-custom ">
                 <thead>
                     <tr>
@@ -38,26 +41,37 @@ export default function QuestionType({ questionTypes }: PageProps & { questionTy
                             <Sorting title="Nomor" />
                         </th>
                         <th className="th-custom ">
-                            <Sorting title="Nama Tipe Pertanyaan" />
+                            <Sorting title="Nama Layanan" />
+                        </th>
+                        <th className="th-custom ">
+                            <Sorting title="Icon " />
                         </th>
                         <th className="th-custom text-right"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {questionTypes.length === 0 && (
+                    {services.length === 0 && (
                         <tr>
                             <td colSpan={4} className="text-center font-bold">
-                                Pertanyaan tidak ada!
+                                Service tidak ada!
                             </td>
                         </tr>
                     )}
-                    {questionTypes.map((item, index) => (
+                    {services.map((item, index) => (
                         <tr className="" key={index}>
                             <td className="td-custom ">
                                 {index + 1}
                             </td>
                             <td className="td-custom">
-                                {item.name}
+                                {item.title}
+                            </td>
+                            <td className="td-custom">
+                                <LucideIcon
+                                    name={item.icon as keyof typeof icons}
+                                    size={50}
+                                    fill={item.fill}
+                                    className={calculateLuminance(item.fill) > 0.179 ? 'text-gray-600' : 'text-gray-200'}
+                                />
                             </td>
                             <td className="td-custom text-right">
                                 <button
@@ -74,7 +88,7 @@ export default function QuestionType({ questionTypes }: PageProps & { questionTy
                                 >
                                     <button
                                         onClick={() => {
-                                            router.get(route('admin.questionType.edit', item.id))
+                                            router.get(route('admin.service.edit', item.id))
                                             setActiveIndex(null);
                                         }}
                                         className="block w-full px-4 py-2 text-left border-b-2 border-black text-black hover:bg-gray-200"
@@ -83,7 +97,7 @@ export default function QuestionType({ questionTypes }: PageProps & { questionTy
                                     </button>
                                     <button
                                         onClick={() => {
-                                            router.delete(route('admin.questionType.destroy', item.id), {
+                                            router.delete(route('admin.service.destroy', item.id), {
                                                 onSuccess: () => {
                                                     toast("Tipe Pertanyaan dihapus")
                                                 }, onError: (error) => {
