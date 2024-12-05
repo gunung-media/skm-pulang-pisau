@@ -21,6 +21,8 @@ class Question extends Model
         'custom_answers'
     ];
 
+    protected $with = ['questionType'];
+
     protected function casts(): array
     {
         return [
@@ -52,7 +54,7 @@ class Question extends Model
     protected function customAnswers(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => is_null($value) ? json_encode(["Sangat Buruk", "Buruk", "Bagus", "Sangat Bagus"]) : json_decode($value),
+            get: fn($value) => is_null($value) ? json_encode(["Sangat Buruk", "Buruk", "Bagus", "Sangat Bagus"]) : $value,
             set: fn($value) =>  json_encode($value)
         );
     }

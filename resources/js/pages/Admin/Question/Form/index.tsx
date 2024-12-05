@@ -1,18 +1,21 @@
 import Field from "@/components/Field";
+import Select from "@/components/Select";
 import { useToast } from "@/components/Toast";
 import ToggleSwitch from "@/components/ToggleSwitch";
 import { QuestionDto, QuestionType } from "@/features/Question";
+import { QTType } from "@/features/QuestionType";
 import AuthenticatedLayout from "@/layouts/Authenticated";
 import { PageProps } from "@/types";
 import { router, useForm } from "@inertiajs/react";
 import { FormEventHandler, useEffect, useState } from "react";
 
-export default function Form({ question }: PageProps & { question?: QuestionType }) {
+export default function Form({ question, questionTypes }: PageProps & { question?: QuestionType, questionTypes: QTType[] }) {
     const { data: dto, setData, post } = useForm<QuestionDto>({
         question: "",
         number_of_answers: 4,
         is_active: true,
-        custom_answers: ["", "", "", ""]
+        custom_answers: ["", "", "", ""],
+        question_type_id: 1
     })
     const [isEditing, setIsEditing] = useState(false);
     const { toast, ToastContainer } = useToast()
@@ -25,7 +28,8 @@ export default function Form({ question }: PageProps & { question?: QuestionType
                 position: question.position,
                 is_active: question.is_active,
                 number_of_answers: question.number_of_answers,
-                custom_answers: JSON.parse(question.custom_answers ?? "[]")
+                custom_answers: JSON.parse(question.custom_answers ?? "[]"),
+                question_type_id: question.question_type_id
             }))
         }
     }, [question])
@@ -78,6 +82,14 @@ export default function Form({ question }: PageProps & { question?: QuestionType
                             <span className="mx-4">Pertanyaan</span>
                             <div className="flex-grow border-t border-black"></div>
                         </div>
+                        <Select
+                            className="mb-5"
+                            label="Utilities"
+                            items={questionTypes.map((item) => ({ name: item.name, value: item.id }))}
+                            value={dto?.question_type_id}
+                            onChange={(e) => setData('question_type_id', e)}
+                            isName={true}
+                        />
                         <Field
                             className="mb-5"
                             label="Pertanyaan"

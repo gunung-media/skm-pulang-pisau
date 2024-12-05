@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\QuestionRepository;
+use App\Repositories\QuestionTypeRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,7 +15,8 @@ use Inertia\Response as InertiaResponse;
 class QuestionController extends Controller
 {
     public function __construct(
-        protected QuestionRepository $questionRepository
+        protected QuestionRepository $questionRepository,
+        protected QuestionTypeRepository $questionTypeRepository,
     ) {}
 
     public function index(): InertiaResponse
@@ -26,7 +28,9 @@ class QuestionController extends Controller
 
     public function create(): InertiaResponse
     {
-        return Inertia::render('Admin/Question/Form/index');
+        return Inertia::render('Admin/Question/Form/index', [
+            'questionTypes' => $this->questionTypeRepository->getAll()
+        ]);
     }
 
     public function store(Request $request): Response|RedirectResponse
@@ -45,7 +49,8 @@ class QuestionController extends Controller
     public function edit(string $id): InertiaResponse
     {
         return Inertia::render('Admin/Question/Form/index', [
-            'question' => $this->questionRepository->findById($id)
+            'question' => $this->questionRepository->findById($id),
+            'questionTypes' => $this->questionTypeRepository->getAll()
         ]);
     }
 

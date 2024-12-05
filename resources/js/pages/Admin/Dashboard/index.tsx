@@ -68,7 +68,7 @@ export default function Dashboard() {
                         classButton="h-auto px-0 border-none bg-trasparent"
                         classOptions="-left-4 -right-3 w-24 py-1"
                         classArrow="ml-1"
-                        items={['Semua', 'Pria', 'Wanita']}
+                        items={['Semua', 'Pria', 'Wanita'].map((item) => ({ name: item, value: item }))}
                         value={genderFilter}
                         onChange={(value) => setGenderFilter(value)}
                         small

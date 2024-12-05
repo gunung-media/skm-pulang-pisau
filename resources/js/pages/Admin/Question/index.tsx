@@ -45,6 +45,7 @@ export default function Question({ questions }: PageProps & { questions: Questio
         setActiveQuestions(questions.filter((item) => item.is_active))
         setInactiveQuestions(questions.filter((item) => !item.is_active))
 
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -80,6 +81,9 @@ export default function Question({ questions }: PageProps & { questions: Questio
                             <Sorting title="Soal Nomor" />
                         </th>
                         <th className="th-custom ">
+                            <Sorting title="Tipe Pertanyaan" />
+                        </th>
+                        <th className="th-custom ">
                             <Sorting title="Pertanyaan" />
                         </th>
                         <th className="th-custom">
@@ -100,6 +104,11 @@ export default function Question({ questions }: PageProps & { questions: Questio
                         <tr className="" key={index}>
                             <td className="td-custom text-center">
                                 {item.position}
+                            </td>
+                            <td className="td-custom">
+                                <span className="px-2 py-1 rounded-full bg-gray-200 text-xs">
+                                    {item.question_type.name}
+                                </span>
                             </td>
                             <td className="td-custom">
                                 {item.question}

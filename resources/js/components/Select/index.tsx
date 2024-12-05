@@ -10,11 +10,12 @@ type SelectProps = {
     classOptions?: string;
     classOption?: string;
     placeholder?: string;
-    items: string[];
+    items: { name: string; value: any }[];
     value: any;
     onChange: (value: any) => void;
     up?: boolean;
     small?: boolean;
+    isName?: boolean;
 };
 
 const Select = ({
@@ -30,6 +31,7 @@ const Select = ({
     onChange,
     up,
     small,
+    isName,
 }: SelectProps) => (
     <div className={`relative ${className}`}>
         {label && <div className="mb-3 text-xs font-bold">{label}</div>}
@@ -47,7 +49,7 @@ const Select = ({
                     >
                         <span className="mr-auto truncate">
                             {value ? (
-                                value
+                                isName ? items.find((item) => item.value === value)?.name : value
                             ) : (
                                 <span className="text-n-2 dark:text-white/75">
                                     {placeholder}
@@ -72,14 +74,14 @@ const Select = ({
                                 } ${open ? "z-10" : ""} ${classOptions}`
                             )}
                         >
-                            {items.map((item, index) => (
+                            {items.map(({ name, value }, index) => (
                                 <Listbox.Option
                                     className={`flex items-start px-3 py-2 rounded-sm text-sm font-bold text-n-3 transition-colors cursor-pointer hover:text-n-1 ui-selected:!bg-n-3/20 ui-selected:!text-n-1 tap-highlight-color dark:text-white/50 dark:hover:text-white dark:ui-selected:!text-white ${small ? "!py-1 !pl-4 text-xs" : ""
                                         } ${classOption}`}
-                                    key={item}
-                                    value={item}
+                                    key={index}
+                                    value={value}
                                 >
-                                    {item}
+                                    {name}
                                 </Listbox.Option>
                             ))}
                         </Listbox.Options>
