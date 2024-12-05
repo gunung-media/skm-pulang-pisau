@@ -75,8 +75,8 @@ export default function Dashboard() {
                     />
                 </div>
             </div>
-            <div className="flex -mx-2.5 lg:block lg:mx-0">
-                <div className="w-[calc(65%-1.25rem)] mx-2.5 lg:w-full lg:mx-0 lg:mb-5">
+            <div className="lg:flex lg:-mx-2.5 block mx-0">
+                <div className="lg:w-[calc(65%-1.25rem)] lg:mx-2.5 w-full mx-0 mb-5">
                     <CardChart title="Distribusi Skala Jawaban ">
                         <ChartPie
                             data={dashboardData?.answerDistribution ?? []}
@@ -87,7 +87,7 @@ export default function Dashboard() {
                         <ChartPolar items={dashboardData?.answerTrend ?? []} />
                     </CardChart>
                 </div>
-                <div className="w-[calc(35%-1.25rem)] mx-2.5 lg:w-full lg:mx-0">
+                <div className="lg:w-[calc(35%-1.25rem)] lg:mx-2.5 w-full mx-0">
                     <CardChart title="Peringkat Pertanyaan">
                         <table className="table-custom !border-none">
                             <thead className="md:hidden">
