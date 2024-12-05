@@ -173,7 +173,7 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
                     </div>
                 ) : (
                     <div className="max-w-[70rem] rounded-base w-full">
-                        <div className="max-w-full min-h-[30rem] overflow-y-auto rounded-b-base border-2 border-border bg-white p-5 font-base ">
+                        <div className="max-w-full min-h-[30rem] overflow-y-auto rounded-b-base border-2 border-border bg-white p-5 font-base">
                             <ProgressBar
                                 currentValue={currentStep + 1}
                                 maxValue={sortedQuestions.length + 6}
