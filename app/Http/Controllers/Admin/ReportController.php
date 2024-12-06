@@ -28,9 +28,12 @@ class ReportController extends Controller
     {
         $data = $this->responseRepository->findByAttributesWhereBetween(
             $request->only('question_type_id'),
-            $request->only(['start_date', 'end_date'])
+            $request->only(['start_date', 'end_date']),
+            paginate: true
         );
 
-        return response()->json($data);
+        return response()->json([
+            'data' => $data
+        ]);
     }
 }

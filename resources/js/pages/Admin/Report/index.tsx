@@ -3,11 +3,20 @@ import { PageProps } from "@/types";
 import { SpanText } from "./Components/SpanText";
 import Select from "@/components/Select";
 import { QTType } from "@/features/QuestionType";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Field from "@/components/Field";
 import Button from "@/components/Button";
 import { Calendar } from "lucide-react";
 import Sorting from "@/components/Sorting";
+import axios, { AxiosResponse } from "axios";
+import { ResponseType } from "@/features/Response";
+import { toIndonesian } from "@/utils/date";
+import TablePagination from "@/components/TablePagination";
+import { PaginateTableInterface } from "@/interfaces/PaginateTableInterface";
+
+type DataApiType = {
+    data: PaginateTableInterface<ResponseType>
+}
 
 export default function Report({ questionTypes }: PageProps & { questionTypes: QTType[] }) {
     const [search, setSearch] = useState<{
@@ -24,7 +33,15 @@ export default function Report({ questionTypes }: PageProps & { questionTypes: Q
         ...questionTypes.map((item) => ({ name: item.name, value: item.id })),
     ];
 
-    console.log(items)
+    const [dataApi, setDataApi] = useState<DataApiType>();
+
+    useEffect(() => {
+        const fetchStaticData = async () => {
+            const { data }: AxiosResponse<DataApiType> = await axios.get(route('admin.report.data'));
+            setDataApi(data)
+        }
+        fetchStaticData()
+    }, []);
     return (
         <AuthenticatedLayout title="Hasil SKM">
             <div className="card px-5 py-3 text-center">
@@ -95,9 +112,6 @@ export default function Report({ questionTypes }: PageProps & { questionTypes: Q
                                 <Sorting title="Jenis Kelamin Responden" />
                             </th>
                             <th className="th-custom ">
-                                <Sorting title="Jenis Kelamin Responden" />
-                            </th>
-                            <th className="th-custom ">
                                 <Sorting title="Pekerjaan Responden" />
                             </th>
                             <th className="th-custom ">
@@ -110,15 +124,54 @@ export default function Report({ questionTypes }: PageProps & { questionTypes: Q
                         </tr>
                     </thead>
                     <tbody>
-                        {questionTypes.length === 0 && (
+                        {dataApi?.data.data.map((item, index) => (
                             <tr>
-                                <td colSpan={4} className="text-center font-bold">
-                                    Pertanyaan tidak ada!
+                                <td className="text-center font-bold">
+                                    {index + 1}
+                                </td>
+                                <td className="">
+                                    {item.respondent?.service?.title ?? ''}
+                                </td>
+                                <td className="">
+                                    {item.question?.question_type?.name ?? ''}
+                                </td>
+                                <td className="">
+                                    {item.question?.question ?? ''}
+                                </td>
+                                <td className="">
+                                    {JSON.parse(item.question?.custom_answers ?? '')[parseInt(item.answer) - 1]}
+                                </td>
+                                <td className="">
+                                    {parseInt(item.answer) - 1}
+                                </td>
+                                <td className="">
+                                    {item.respondent?.age ?? ''}
+                                </td>
+                                <td className="">
+                                    {item.respondent?.gender ?? ''}
+                                </td>
+                                <td className="">
+                                    {item.respondent?.jobs ?? ''}
+                                </td>
+                                <td className="">
+                                    {item.respondent?.education ?? ''}
+                                </td>
+                                <td className="">
+                                    {toIndonesian(item.created_at ?? '')}
                                 </td>
                             </tr>
-                        )}
+                        ))}
                     </tbody>
                 </table>
+                <TablePagination
+                    currentPage={dataApi?.data.current_page}
+                    totalPages={dataApi?.data.last_page}
+                    previousPage={dataApi?.data.prev_page_url}
+                    nextPage={dataApi?.data.next_page_url}
+                    onChangePage={(data) => {
+                        setDataApi({ ...dataApi, data: data.data.data })
+                    }}
+                />
             </div>
         </AuthenticatedLayout>
     )

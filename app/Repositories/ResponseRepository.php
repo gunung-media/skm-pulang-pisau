@@ -262,9 +262,11 @@ class ResponseRepository implements RepositoryInterface
     public function findByAttributesWhereBetween(
         array $attributes = [],
         array $whereBetween = [],
-    ): Collection {
+        bool $paginate = false
+    ): Collection | LengthAwarePaginator {
         $query =  $this->response
-            ->with(['question', 'respondent']);
+            ->with(['question', 'respondent'])
+            ->orderBy('created_at', 'desc');
 
         if (!empty($attributes)) {
             $query->where($attributes);
@@ -273,8 +275,6 @@ class ResponseRepository implements RepositoryInterface
             $query->whereBetween('created_at', $whereBetween);
         }
 
-        return $query
-            ->orderByDesc('created_at')
-            ->get();
+        return $paginate ? $query->paginate(15) : $query->get();
     }
 }
