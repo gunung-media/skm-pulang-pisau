@@ -66,59 +66,60 @@ export default function Report({ questionTypes }: PageProps & { questionTypes: Q
                 </div>
                 <Button className="m-auto mt-5" onClick={() => { }}><Calendar size={10} className="mr-2" /> Lihat Laporan</Button>
             </div>
-
-            <table className="table-custom mt-20">
-                <thead>
-                    <tr>
-                        <th className="th-custom">
-                            <Sorting title="#" />
-                        </th>
-                        <th className="th-custom">
-                            <Sorting title="Unit Layanan" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Unsur Penilaian" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Pertanyaan" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Tanggapan Responden" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Bobot Tanggapan" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Usia Responden" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Jenis Kelamin Responden" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Jenis Kelamin Responden" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Pekerjaan Responden" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Pendidikan Responden" />
-                        </th>
-                        <th className="th-custom ">
-                            <Sorting title="Waktu Survey" />
-                        </th>
-                        <th className="th-custom text-right"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {questionTypes.length === 0 && (
+            <div className="overflow-x-auto mt-20">
+                <table className="table-custom ">
+                    <thead>
                         <tr>
-                            <td colSpan={4} className="text-center font-bold">
-                                Pertanyaan tidak ada!
-                            </td>
+                            <th className="th-custom">
+                                <Sorting title="#" />
+                            </th>
+                            <th className="th-custom">
+                                <Sorting title="Unit Layanan" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Unsur Penilaian" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Pertanyaan" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Tanggapan Responden" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Bobot Tanggapan" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Usia Responden" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Jenis Kelamin Responden" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Jenis Kelamin Responden" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Pekerjaan Responden" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Pendidikan Responden" />
+                            </th>
+                            <th className="th-custom ">
+                                <Sorting title="Waktu Survey" />
+                            </th>
+                            <th className="th-custom text-right"></th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {questionTypes.length === 0 && (
+                            <tr>
+                                <td colSpan={4} className="text-center font-bold">
+                                    Pertanyaan tidak ada!
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </AuthenticatedLayout>
     )
 }

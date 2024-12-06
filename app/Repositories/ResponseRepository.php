@@ -15,7 +15,8 @@ class ResponseRepository implements RepositoryInterface
 
     public function getAll(): Collection
     {
-        return $this->response->all();
+        return $this->response
+            ->get();
     }
 
     public function findById($id): ?Response
@@ -255,5 +256,25 @@ class ResponseRepository implements RepositoryInterface
         }
 
         return array_values($monthlyTrend);
+    }
+
+
+    public function findByAttributesWhereBetween(
+        array $attributes = [],
+        array $whereBetween = [],
+    ): Collection {
+        $query =  $this->response
+            ->with(['question', 'respondent']);
+
+        if (!empty($attributes)) {
+            $query->where($attributes);
+        }
+        if (!empty($whereBetween) && count($whereBetween) === 2) {
+            $query->whereBetween('created_at', $whereBetween);
+        }
+
+        return $query
+            ->orderByDesc('created_at')
+            ->get();
     }
 }
