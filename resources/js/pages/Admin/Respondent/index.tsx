@@ -107,7 +107,7 @@ export default function Index() {
                             <td className="td-custom">{item.name}</td>
                             <td className="td-custom">{toIndonesian(item.created_at!)}</td>
                             <td className="td-custom text-center">{item.age}</td>
-                            <td className="td-custom text-center">{item.type_of_service ?? "-"}</td>
+                            <td className="td-custom text-center">{item.service?.title ?? "-"}</td>
                             <td className="td-custom text-center">{parseFloat(item.index_satisfaction ?? "").toFixed(2)}</td>
                             <td className="td-custom text-center">
                             </td>

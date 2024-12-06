@@ -28,11 +28,11 @@ const defaultRespondent: RespondentDto = {
     gender: '',
     education: '',
     jobs: '',
-    type_of_service: '',
+    service_id: 1,
     suggestion: ''
 }
 type StaticType = {
-    icon: string, title: string, fill: string
+    icon: string, title: string, fill: string, id?: number
 }
 
 type StaticData = {
@@ -75,6 +75,7 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
         title: string;
         data?: StaticType[];
         onClick: (value: string) => void;
+        isId?: boolean
     } => {
         switch (currentStep) {
             case 1:
@@ -104,7 +105,8 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
                 return {
                     title: "Silahkan Pilih Jenis Layanan",
                     data: staticData?.services,
-                    onClick: (value: string) => setRespondentData({ ...respondentData, type_of_service: value })
+                    onClick: (value: string) => setRespondentData({ ...respondentData, service_id: parseInt(value) }),
+                    isId: true
                 }
 
             default:
@@ -188,14 +190,14 @@ export default function UserSatisfactionSurvey({ questions, ...props }: PageProp
                                     <div className="w-full p-10 flex flex-col justify-center items-center m-auto">
                                         <h2 className="text-xl font-bold mb-10 text-black uppercase tracking-wide text-center">{deteminatorRespondentData().title}</h2>
                                         <div className='flex justify-center m-auto flex-wrap w-full gap-10'>
-                                            {deteminatorRespondentData().data && Object.entries(deteminatorRespondentData().data!).map(([_, { title, icon, fill }], index) => (
+                                            {deteminatorRespondentData().data && Object.entries(deteminatorRespondentData().data!).map(([_, { title, icon, fill, id }], index) => (
                                                 <OptionAnswer
                                                     key={index}
                                                     name={title}
                                                     icon={icon}
                                                     fill={fill}
                                                     onClick={() => {
-                                                        deteminatorRespondentData().onClick(title)
+                                                        deteminatorRespondentData().onClick(id ? id.toString() : title)
                                                         handleNextStep()
                                                     }}
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
@@ -17,15 +18,22 @@ class Respondent extends Model
         'education',
         'age',
         'jobs',
-        'type_of_service',
+        'service_id',
         'suggestion'
     ];
 
     protected $appends = ['index_satisfaction'];
 
+    protected $with = ['service'];
+
     public function responses(): HasMany
     {
         return $this->hasMany(Response::class);
+    }
+
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(Service::class);
     }
 
     protected function indexSatisfaction(): Attribute

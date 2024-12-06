@@ -50,7 +50,7 @@ export default function ProjectsDetailsPage({ respondent }: PageProps & { respon
         {
             title: "Jenis Pelayanan",
             icon: "notification-bell",
-            content: "type_of_service",
+            content: "service",
         },
         {
             title: "Tanggal Mengisi",
@@ -98,7 +98,9 @@ export default function ProjectsDetailsPage({ respondent }: PageProps & { respon
                                                 ? (respondent[info.content] as unknown as ResponseType[]).map((item: ResponseType) => (
                                                     <span key={item.id}>{item.question_id}</span>
                                                 ))
-                                                : String(respondent[info.content] ?? "")
+                                                // @ts-expect-error
+                                                : typeof respondent[info.content] === 'object' ? respondent[info.content]?.title :
+                                                    String(respondent[info.content] ?? "")
                                         }
                                     </div>
                                 </div>
