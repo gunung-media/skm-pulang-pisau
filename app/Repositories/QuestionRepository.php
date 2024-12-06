@@ -81,4 +81,9 @@ class QuestionRepository implements RepositoryInterface
             ->values() // Reset keys after sorting
             ->toArray();
     }
+
+    public function count(): int
+    {
+        return $this->question->count();
+    }
 }

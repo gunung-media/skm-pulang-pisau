@@ -84,4 +84,9 @@ class RespondentRepository implements RepositoryInterface
             ->where('created_at', '>=', now()->subMonth())
             ->paginate();
     }
+
+    public function count(): int
+    {
+        return $this->respondent->count();
+    }
 }

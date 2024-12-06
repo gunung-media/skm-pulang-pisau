@@ -13,43 +13,47 @@ import { ResponseType } from "@/features/Response";
 import { toIndonesian } from "@/utils/date";
 import TablePagination from "@/components/TablePagination";
 import { PaginateTableInterface } from "@/interfaces/PaginateTableInterface";
+import { ServiceType } from "@/features/Service";
 
 type DataApiType = {
-    data: PaginateTableInterface<ResponseType>
+    data: PaginateTableInterface<ResponseType>,
+    score: number,
+    counting: Record<number, { sum: number, avg: number, index: number }>
 }
 
-export default function Report({ questionTypes }: PageProps & { questionTypes: QTType[] }) {
+export default function Report({ services }: PageProps & { services: ServiceType[] }) {
     const [search, setSearch] = useState<{
-        question_type_id: number,
+        service_id?: number,
         start_date?: string,
         end_date?: string
     }>({
-        question_type_id: -1,
-        start_date: "",
-        end_date: ""
+        service_id: -1
     });
     const items = [
         { name: "Semua ", value: -1 },
-        ...questionTypes.map((item) => ({ name: item.name, value: item.id })),
+        ...services.map((item) => ({ name: item.title, value: item.id })),
     ];
 
     const [dataApi, setDataApi] = useState<DataApiType>();
 
+    const fetchStaticData = async () => {
+        const { data }: AxiosResponse<DataApiType> = await axios.get(route('admin.report.data', search));
+        setDataApi(data)
+    }
+
     useEffect(() => {
-        const fetchStaticData = async () => {
-            const { data }: AxiosResponse<DataApiType> = await axios.get(route('admin.report.data'));
-            setDataApi(data)
-        }
         fetchStaticData()
     }, []);
+
+
     return (
         <AuthenticatedLayout title="Hasil SKM">
             <div className="card px-5 py-3 text-center">
                 <h5 className="text-sm font-bold text-blue-500 mb-5">Hasil Penilaian SKM (Ongoing):</h5>
                 <h1 className="text-2xl font-bold">
-                    Nilai IKM: <SpanText score={25.5} />,
-                    Mutu Pelayanan: <SpanText score={90} isQuality />,
-                    Kinerja Pelayanan: <SpanText score={76} isPerformace />
+                    Nilai IKM: <SpanText score={dataApi?.score ?? 0} />,
+                    Mutu Pelayanan: <SpanText score={dataApi?.score ?? 0} isQuality />,
+                    Kinerja Pelayanan: <SpanText score={dataApi?.score ?? 0} isPerformace />
                 </h1>
                 <p className="text-left mt-10 text-xs">Buat Laporan SKM dengan mengisi kolom-kolom berikut sebagai parameter (opsional)</p>
                 <div className="flex justify-between gap-5 mt-10">
@@ -57,8 +61,8 @@ export default function Report({ questionTypes }: PageProps & { questionTypes: Q
                         className="mb-5 w-full"
                         label="Pilih Unit Layanan"
                         items={items}
-                        value={search.question_type_id}
-                        onChange={(e) => setSearch({ ...search, question_type_id: e })}
+                        value={search?.service_id}
+                        onChange={(e) => setSearch({ ...search, service_id: e })}
                         isName={true}
                     />
                     <Field
@@ -66,7 +70,7 @@ export default function Report({ questionTypes }: PageProps & { questionTypes: Q
                         className="mb-5 w-full"
                         label="Awal Periode SKM"
                         placeholder="Masukan pertanyaan..."
-                        value={search.start_date ?? ""}
+                        value={search?.start_date ?? ""}
                         onChange={(e: any) => setSearch({ ...search, start_date: e.target.value })}
                         required
                     />
@@ -76,12 +80,12 @@ export default function Report({ questionTypes }: PageProps & { questionTypes: Q
                         className="mb-5 w-full"
                         label="Akhir Periode SKM"
                         placeholder="Masukan pertanyaan..."
-                        value={search.end_date ?? ""}
+                        value={search?.end_date ?? ""}
                         onChange={(e: any) => setSearch({ ...search, end_date: e.target.value })}
                         required
                     />
                 </div>
-                <Button className="m-auto mt-5" onClick={() => { }}><Calendar size={10} className="mr-2" /> Lihat Laporan</Button>
+                <Button className="m-auto mt-5" onClick={fetchStaticData}><Calendar size={10} className="mr-2" /> Lihat Laporan</Button>
             </div>
             <div className="overflow-x-auto mt-20">
                 <table className="table-custom ">

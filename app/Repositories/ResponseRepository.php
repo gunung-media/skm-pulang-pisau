@@ -269,12 +269,12 @@ class ResponseRepository implements RepositoryInterface
             ->orderBy('created_at', 'desc');
 
         if (!empty($attributes)) {
-            $query->where($attributes);
+            $query->whereRelation('respondent', $attributes);
         }
         if (!empty($whereBetween) && count($whereBetween) === 2) {
             $query->whereBetween('created_at', $whereBetween);
         }
 
-        return $paginate ? $query->paginate(15) : $query->get();
+        return $paginate ? $query->paginate(10) : $query->get();
     }
 }
