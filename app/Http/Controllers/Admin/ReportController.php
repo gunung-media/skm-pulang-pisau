@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ReportExport;
 use App\Http\Controllers\Controller;
 use App\Repositories\QuestionRepository;
 use App\Repositories\RespondentRepository;
@@ -11,6 +12,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ReportController extends Controller
 {
@@ -37,36 +40,20 @@ class ReportController extends Controller
         );
 
 
-        $forCounting = $this->responseRepository->findByAttributesWhereBetween(
+        $report = $this->responseRepository->report(
             $request->has('service_id') && $request->service_id != -1 ?  $request->only('service_id') : [],
             $request->only(['start_date', 'end_date']),
         );
 
-        $totalRespondent = $this->respondentRepository->count();
-        $totalQuestion = $this->questionRepository->count();
-        $perQuestionResponses = $forCounting->groupBy('question_id')->toArray();
-
-        $counting = [];
-        $sumIndex = 0;
-
-
-        foreach ($perQuestionResponses as $key => $value) {
-            $value = collect($value);
-            $sumPerQuestion = $value->sum('answer');
-            $averagePerQuestion = $sumPerQuestion / $totalRespondent;
-            $indexPerQuestion = $averagePerQuestion / $totalQuestion;
-            $counting[$key] = [
-                'sum' => $sumPerQuestion,
-                'average' => $averagePerQuestion,
-                'index' => $indexPerQuestion
-            ];
-            $sumIndex += $indexPerQuestion;
-        }
-
         return response()->json([
             'data' => $data,
-            'score' => number_format($sumIndex * 25, 2),
-            'counting' => $counting
+            'score' => number_format($report['sumIndex'] * 25, 2),
+            'counting' => $report['counting']
         ]);
+    }
+
+    public function download(Request $request): BinaryFileResponse
+    {
+        return Excel::download(new ReportExport, 'users.xlsx');
     }
 }

@@ -14,7 +14,9 @@ class RespondentRepository implements RepositoryInterface
 
     public function getAll(): Collection
     {
-        return $this->respondent->all();
+        return $this->respondent
+            ->with('responses.question')
+            ->get();
     }
 
     public function findById($id): ?Respondent
@@ -88,5 +90,19 @@ class RespondentRepository implements RepositoryInterface
     public function count(): int
     {
         return $this->respondent->count();
+    }
+
+    public function simpleData()
+    {
+        $respondent = $this->getAll();
+
+        $data = [];
+
+        foreach ($respondent as  $value) {
+            $response = $value->responses->map(fn($item) => $item->answer)->toArray();
+            $data[] = [$value->id, ...$response];
+        }
+
+        return $data;
     }
 }

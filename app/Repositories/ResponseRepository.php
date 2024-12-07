@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\DB;
 class ResponseRepository implements RepositoryInterface
 {
     public function __construct(
-        public Response $response
+        public Response $response,
+        protected RespondentRepository $respondentRepository,
+        protected QuestionRepository $questionRepository,
     ) {}
 
     public function getAll(): Collection
@@ -276,5 +278,51 @@ class ResponseRepository implements RepositoryInterface
         }
 
         return $paginate ? $query->paginate(10) : $query->get();
+    }
+
+    public function report(
+        array $attributes = [],
+        array $whereBetween = [],
+    ): array {
+        $query =  $this->response
+            ->with(['question', 'respondent'])
+            ->orderBy('created_at', 'desc');
+
+        if (!empty($attributes)) {
+            $query->whereRelation('respondent', $attributes);
+        }
+        if (!empty($whereBetween) && count($whereBetween) === 2) {
+            $query->whereBetween('created_at', $whereBetween);
+        }
+
+        $totalRespondent = $this->respondentRepository->count();
+        $totalQuestion = $this->questionRepository->count();
+        $perQuestionResponses = $query->get()->groupBy('question_id')->toArray();
+
+        $counting = [];
+        $sumIndex = 0;
+
+
+        foreach ($perQuestionResponses as $key => $value) {
+            $value = collect($value);
+            $sumPerQuestion = $value->sum('answer');
+            $averagePerQuestion = $sumPerQuestion / $totalRespondent;
+            $indexPerQuestion = $averagePerQuestion / $totalQuestion;
+            $counting[$key] = [
+                'sum' => $sumPerQuestion,
+                'average' => $averagePerQuestion,
+                'index' => $indexPerQuestion
+            ];
+            $sumIndex += $indexPerQuestion;
+        }
+
+        return [
+            'sumIndex' => $sumIndex,
+            'counting' => $counting,
+            'performance' =>      $sumIndex >= 88.31 ? "Sangat Baik"
+                : ($sumIndex >= 76.61 ? "Baik"
+                    : ($sumIndex >= 65.00 ? "Kurang Baik" : "Tidak Baik"))
+
+        ];
     }
 }
