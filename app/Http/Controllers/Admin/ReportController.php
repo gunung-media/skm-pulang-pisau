@@ -54,6 +54,6 @@ class ReportController extends Controller
 
     public function download(Request $request): BinaryFileResponse
     {
-        return Excel::download(new ReportExport, 'users.xlsx');
+        return Excel::download(new ReportExport, 'report_skm.xlsx');
     }
 }

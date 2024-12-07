@@ -112,7 +112,7 @@ class ReportExport implements FromArray, WithHeadings, WithStyles, WithEvents
             ['Jumlah Nilai per Parameter (JP)', ...collect($report['counting'])->map(fn($item) => $item['sum'])->toArray()],
             ['Nilai Rata-rata (NRR) per Parameter', ...collect($report['counting'])->map(fn($item) => $item['average'])->toArray()],
             ['Nilai Indeks per Parameter', ...collect($report['counting'])->map(fn($item) => $item['average'])->toArray()],
-            ['Indeks Kepuasan Masyarakat (IKM)', $report['sumIndex']],
+            ['Indeks Kepuasan Masyarakat (IKM)', number_format($report['sumIndex'] * 25, 2)],
             ['Kategori Penilaian Kepuasan Pelayanan', $report['performance']],
         ];
 

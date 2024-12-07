@@ -2,11 +2,10 @@ import AuthenticatedLayout from "@/layouts/Authenticated";
 import { PageProps } from "@/types";
 import { SpanText } from "./Components/SpanText";
 import Select from "@/components/Select";
-import { QTType } from "@/features/QuestionType";
 import { useEffect, useState } from "react";
 import Field from "@/components/Field";
 import Button from "@/components/Button";
-import { Calendar } from "lucide-react";
+import { Calendar, Sheet, SheetIcon } from "lucide-react";
 import Sorting from "@/components/Sorting";
 import axios, { AxiosResponse } from "axios";
 import { ResponseType } from "@/features/Response";
@@ -44,6 +43,10 @@ export default function Report({ services }: PageProps & { services: ServiceType
     useEffect(() => {
         fetchStaticData()
     }, []);
+
+    const handleExport = () => {
+        window.open(route('admin.report.download', search), '_blank');
+    }
 
 
     return (
@@ -87,7 +90,12 @@ export default function Report({ services }: PageProps & { services: ServiceType
                 </div>
                 <Button className="m-auto mt-5" onClick={fetchStaticData}><Calendar size={10} className="mr-2" /> Lihat Laporan</Button>
             </div>
-            <div className="overflow-x-auto mt-20">
+            <div className="mt-20">
+                <button className="btn-stroke btn-small btn-shadow min-w-[11.25rem] md:min-w-full" onClick={handleExport}>
+                    <Sheet /> Export
+                </button>
+            </div>
+            <div className="overflow-x-auto">
                 <table className="table-custom ">
                     <thead>
                         <tr>
