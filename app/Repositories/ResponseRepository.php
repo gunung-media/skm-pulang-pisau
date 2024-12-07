@@ -319,7 +319,7 @@ class ResponseRepository implements RepositoryInterface
         return [
             'sumIndex' => $sumIndex,
             'counting' => $counting,
-            'performance' =>      $sumIndex >= 88.31 ? "Sangat Baik"
+            'performance' => $sumIndex * 25 >= 88.31 ? "Sangat Baik"
                 : ($sumIndex >= 76.61 ? "Baik"
                     : ($sumIndex >= 65.00 ? "Kurang Baik" : "Tidak Baik"))
 
